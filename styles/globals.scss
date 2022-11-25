@@ -1,0 +1,63 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	width: 100vw;
+}
+
+$drawer-open-transition: 0.35s ease-in-out;
+$drawer-close-transition: 0.35s ease-in-out;
+
+.transformDrawer_show {
+	transform: translateX(0);
+	transition: transform $drawer-open-transition;
+}
+
+.transformDrawer_hide {
+	transform: translateX(-100%);
+	transition: transform $drawer-close-transition;
+}
+
+#main-toast-container {
+	grid-template-columns: 1fr 30px;
+}
+.toastIcon {
+	top: 10px;
+}
+
+.toastShow {
+	transform: translateY(0);
+	transition: transform 0.3s ease-in-out;
+}
+.toastHide {
+	transform: translateY(-100%);
+	transition: transform 0.3s ease-in-out;
+}
+
+.responsiveCenteredDrawerContainer {
+	transition: all $drawer-open-transition;
+}
+
+.toast-container-warning {
+	div,
+	svg {
+		color: #000;
+		fill: #000;
+	}
+}
+
+.toast-container-success {
+	div {
+		color: #fff;
+	}
+}
+
+.toast-container-error {
+}
+.toast-container-info {
+}
