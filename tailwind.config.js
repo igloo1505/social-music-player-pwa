@@ -8,9 +8,12 @@ module.exports = {
 	darkMode: "media", // or 'class'
 	theme: {
 		screens: {
+			xs: "540px",
 			sm: "640px",
 			md: "768px",
+			mdlg: "900px",
 			lg: "1024px",
+			lgish: "1090px",
 			xl: "1280px",
 			"2xl": "1536px",
 		},
@@ -18,6 +21,11 @@ module.exports = {
 		colors: ({ colors }) => ({
 			inherit: colors.inherit,
 			current: colors.current,
+			"brand-dark": "#181818",
+			"brand-light": "#F2F2F2",
+			"brand-midDark": "#8758FF",
+			"brand-mid": "#5CB8E4",
+			"main-background-color": "#1a191a",
 			toast_success: `${colors.green[500]}`,
 			toast_error: colors.red[600],
 			toast_warning: colors.yellow[500],
@@ -25,6 +33,7 @@ module.exports = {
 			transparent: colors.transparent,
 			black: colors.black,
 			white: colors.white,
+			whiter: colors.white,
 			slate: colors.slate,
 			gray: colors.gray,
 			zinc: colors.zinc,
@@ -389,12 +398,13 @@ module.exports = {
 				'"Noto Color Emoji"',
 			],
 			serif: [
+				"Lora",
+				"serif",
 				"ui-serif",
 				"Georgia",
 				"Cambria",
 				'"Times New Roman"',
 				"Times",
-				"serif",
 			],
 			mono: [
 				"ui-monospace",
@@ -527,6 +537,7 @@ module.exports = {
 		},
 		gridTemplateColumns: {
 			none: "none",
+			"hero-media-large": "55vw, 40vw",
 			1: "repeat(1, minmax(0, 1fr))",
 			2: "repeat(2, minmax(0, 1fr))",
 			3: "repeat(3, minmax(0, 1fr))",
@@ -716,6 +727,9 @@ module.exports = {
 			90: "0.9",
 			95: "0.95",
 			100: "1",
+			disabled: "0.38",
+			"emphasis-medium": "0.6",
+			"emphasis-high": "0.8",
 		},
 		order: {
 			first: "-9999",
@@ -992,5 +1006,9 @@ module.exports = {
 		"bg-toast_error",
 		"bg-toast_warning",
 		"bg-toast_info",
+		"shadow-toast_success-500/40",
+		"shadow-toast_error-500/40",
+		"shadow-toast_warning-500/40",
+		"shadow-toast_info-500/40",
 	],
 };

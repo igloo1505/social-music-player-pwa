@@ -1,21 +1,61 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, MouseEventHandler } from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../state/store";
 import clsx from "clsx";
 import { useAppDispatch } from "../../hooks/ReduxHooks";
 import { toggleDrawer } from "../../state/actions";
+import { IconType } from "react-icons";
+import { MdOutlineAudiotrack } from "react-icons/md";
+import { SiAudiomack } from "react-icons/si";
+import { GiAudioCassette, GiEyeOfHorus } from "react-icons/gi";
+import gsap from "gsap";
 
 interface DrawerProps {
 	drawer: RootState["UI"]["drawer"];
 }
 
+type DrawerOption = {
+	text: string;
+	href: string;
+	action?: (e: any) => {};
+	icon: IconType;
+};
+
+const DrawerOptions: DrawerOption[] = [
+	{
+		text: "Listen",
+		href: "/userPlaylists",
+		icon: SiAudiomack,
+	},
+	{
+		text: "Create",
+		href: "/createPlaylist",
+		icon: GiAudioCassette,
+	},
+	{
+		text: "Discover",
+		href: "/discover",
+		icon: GiEyeOfHorus,
+	},
+];
+
 const Drawer = ({ drawer: { isOpen } }: DrawerProps) => {
 	const dispatch = useAppDispatch();
 	const [show, setShow] = useState(false);
+	const [hoveredIndex, setHoveredIndex] = useState(-1);
 	useEffect(() => {
 		setShow(isOpen);
+		if (isOpen) {
+			animateOpen();
+		}
+		if (!isOpen) {
+			animateClose();
+		}
 	}, [isOpen]);
-	const handleBackdropClick = () => {
+
+	const handleBackdropClick: MouseEventHandler = (e: MouseEvent) => {
+		e.stopPropagation();
+		e.preventDefault();
 		dispatch(toggleDrawer(false));
 	};
 
@@ -23,12 +63,34 @@ const Drawer = ({ drawer: { isOpen } }: DrawerProps) => {
 		<Fragment>
 			<div
 				className={clsx(
-					"fixed top-0 left-0 h-screen bg-lime-500 w-fit min-w-[150px] flex flex-col justify-start items-center z-[1000]",
-					show ? "transformDrawer_show" : "transformDrawer_hide"
+					"fixed top-0 left-0 h-screen bg-transparent w-fit min-w-[180px] flex flex-col justify-start items-center z-[1000] pt-14 gap-3",
+					isOpen ? "drawerTranslateX0" : "drawerTranslateXLeft"
 				)}
 				id="drawer-outer-container"
+				onClick={handleBackdropClick}
 			>
-				<div className="px-4 py-3 text-xl rounded">Drawer!!</div>
+				{DrawerOptions.map((d, i) => {
+					return (
+						<a
+							href={d.href}
+							key={`drawer-link-${i}`}
+							onClick={d.action ? d.action : () => {}}
+							className="grid w-10/12 px-2 bg-brand-midDark rounded-xl text-whiter min-h-[40px] drawer-floating-option border border-brand-midDark place-items-center hover:border-white"
+							style={{
+								gridTemplateColumns: "40px 1fr",
+							}}
+						>
+							<d.icon
+								style={{
+									width: "2rem",
+									height: "2rem",
+								}}
+								className="transition-all duration-500"
+							/>
+							<div className="text-lg">{d.text}</div>
+						</a>
+					);
+				})}
 			</div>
 			<div
 				className={clsx(
@@ -39,6 +101,24 @@ const Drawer = ({ drawer: { isOpen } }: DrawerProps) => {
 			></div>
 		</Fragment>
 	);
+};
+
+const animateOpen = () => {
+	let tl = gsap.timeline();
+	tl.to(".drawer-floating-option", {
+		x: 0,
+		duration: 0.35,
+		stagger: 0.1,
+	});
+};
+
+const animateClose = () => {
+	let tl = gsap.timeline();
+	tl.to(".drawer-floating-option", {
+		x: "-150%",
+		duration: 0.35,
+		stagger: 0.1,
+	});
 };
 
 const mapStateToProps = (state: RootState, props: any) => ({

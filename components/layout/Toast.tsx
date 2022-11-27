@@ -48,12 +48,12 @@ const Toast = ({ config }: ToastProps) => {
 	return (
 		<div
 			className={clsx(
-				`w-screen absolute top-0 left-0 z-[900] grid gap-2 py-3 px-3 bg-toast_${config.type}  toast-container-${config.type}`,
+				`w-screen absolute top-2 left-0 z-[900] grid gap-2 py-3 px-3 bg-toast_${config.type} toast-container-${config.type} rounded-xl `,
 				isShown ? "toastShow" : "toastHide"
 			)}
 			id="main-toast-container"
 		>
-			<div className="text-white">{config.message}</div>
+			<div className="text-center text-whiter opacity-1">{config.message}</div>
 			<BiX
 				className="w-6 h-6 cursor-pointer fill-white right-2 toastIcon"
 				onClick={closeToast}

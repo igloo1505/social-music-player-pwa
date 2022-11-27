@@ -12,14 +12,16 @@ interface DrawerResponsiveCenterProps {
 	drawer: RootState["UI"]["drawer"];
 	children: [];
 	additionalClasses: string;
+	extraStyles?: object;
 }
 
 const DrawerResponsiveCenter = ({
 	drawer: { isOpen },
 	children,
 	additionalClasses = "",
+	extraStyles = {},
 }: DrawerResponsiveCenterProps) => {
-	const [styles, setStyles] = useState({});
+	const [styles, setStyles] = useState(extraStyles);
 	const [hasRendered, setHasRendered] = useState(false);
 	const setDimensions = (overrideTransition?: boolean): void => {
 		let em = document.getElementById("drawer-outer-container");
@@ -33,7 +35,6 @@ const DrawerResponsiveCenter = ({
 		let tra: string;
 		if (overrideTransition && c.style.transition !== "unset") {
 			tra = c.style.transition;
-			console.log("tra: ", tra);
 			c.style.transition = "unset";
 			setTimeout(() => {
 				c && (c.style.transition = tra);
@@ -57,7 +58,7 @@ const DrawerResponsiveCenter = ({
 	return (
 		<div
 			className={clsx(
-				"flex flex-col justify-center items-center absolute right-0 responsiveCenteredDrawerContainer will-change-auto opacity-0",
+				"flex flex-col items-center absolute right-0 responsiveCenteredDrawerContainer will-change-auto opacity-0",
 				additionalClasses
 			)}
 			id="drawer-responsive-center-container"
