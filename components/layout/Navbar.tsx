@@ -39,7 +39,7 @@ const Navbar = connector(({ drawer: { isOpen } }: NavbarProps) => {
 						overflow: "visible",
 					}}
 				/>
-				<div className="text-xl text-white">ntegrand Audio</div>
+				<div className="text-xl text-white select-none">ntegrand Media</div>
 			</div>
 
 			<NavbarButtons />
