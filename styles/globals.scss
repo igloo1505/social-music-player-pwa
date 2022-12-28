@@ -32,9 +32,9 @@ $drawer-close-transition: 0.35s ease-in-out;
 		transform: translateX(-150%);
 		transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out;
 	}
-	.drawer-floating-option:hover svg {
-		@apply fill-brand-dark;
-	}
+	// .drawer-floating-option:hover svg {
+	// 	@apply fill-brand-dark;
+	// }
 }
 
 // @layer components {
@@ -91,3 +91,13 @@ $drawer-close-transition: 0.35s ease-in-out;
 .drawerTranslateX0 {
 	transform: translateX(0);
 }
+
+// .inner-hero-container {
+// 	transform: translateY(0);
+// }
+
+// @media screen and (min-width: 768px) {
+// 	.inner-hero-container {
+// 		transform: translateY(-20vh);
+// 	}
+// }

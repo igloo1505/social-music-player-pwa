@@ -1,13 +1,17 @@
-import React, { useState, useEffect, Fragment, MouseEventHandler } from "react";
+import React, {
+	useState,
+	useEffect,
+	Fragment,
+	MouseEventHandler,
+	PointerEvent,
+} from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../state/store";
 import clsx from "clsx";
 import { useAppDispatch } from "../../hooks/ReduxHooks";
 import { toggleDrawer } from "../../state/actions";
 import { IconType } from "react-icons";
-import { MdOutlineAudiotrack } from "react-icons/md";
-import { SiAudiomack } from "react-icons/si";
-import { GiAudioCassette, GiEyeOfHorus } from "react-icons/gi";
+import { AiFillExperiment, AiFillPicture, AiFillRocket } from "react-icons/ai";
 import gsap from "gsap";
 
 interface DrawerProps {
@@ -23,26 +27,25 @@ type DrawerOption = {
 
 const DrawerOptions: DrawerOption[] = [
 	{
-		text: "Listen",
-		href: "/userPlaylists",
-		icon: SiAudiomack,
+		text: "Technologies",
+		href: "/technologies",
+		icon: AiFillExperiment,
 	},
 	{
-		text: "Create",
-		href: "/createPlaylist",
-		icon: GiAudioCassette,
+		text: "Demos",
+		href: "/demos",
+		icon: AiFillPicture,
 	},
 	{
-		text: "Discover",
-		href: "/discover",
-		icon: GiEyeOfHorus,
+		text: "Build",
+		href: "/build",
+		icon: AiFillRocket,
 	},
 ];
 
 const Drawer = ({ drawer: { isOpen } }: DrawerProps) => {
 	const dispatch = useAppDispatch();
 	const [show, setShow] = useState(false);
-	const [hoveredIndex, setHoveredIndex] = useState(-1);
 	useEffect(() => {
 		setShow(isOpen);
 		if (isOpen) {
@@ -53,7 +56,7 @@ const Drawer = ({ drawer: { isOpen } }: DrawerProps) => {
 		}
 	}, [isOpen]);
 
-	const handleBackdropClick: MouseEventHandler = (e: MouseEvent) => {
+	const handleBackdropClick: MouseEventHandler = (e: PointerEvent) => {
 		e.stopPropagation();
 		e.preventDefault();
 		dispatch(toggleDrawer(false));
@@ -63,7 +66,7 @@ const Drawer = ({ drawer: { isOpen } }: DrawerProps) => {
 		<Fragment>
 			<div
 				className={clsx(
-					"fixed top-0 left-0 h-screen bg-transparent w-fit min-w-[180px] flex flex-col justify-start items-center z-[1000] pt-14 gap-3",
+					"fixed top-0 left-0 h-screen bg-transparent w-fit min-w-[220px] flex flex-col justify-start items-center z-[1000] pt-14 gap-3",
 					isOpen ? "drawerTranslateX0" : "drawerTranslateXLeft"
 				)}
 				id="drawer-outer-container"

@@ -20,3 +20,10 @@ export const toggleDrawer = (shouldShow?: boolean): Types.TOGGLE_DRAWER => ({
 export const hideToast = (): Types.HIDE_TOAST => ({
 	type: "HIDE_TOAST",
 });
+
+export const setDrawerListener = () => {
+	if (typeof window === "undefined") return;
+	let em = document.getElementById("drawer-responsive-center-container");
+	if (!em) return;
+	em.addEventListener("click", () => toggleDrawer(false));
+};

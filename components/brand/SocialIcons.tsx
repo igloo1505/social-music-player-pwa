@@ -111,7 +111,7 @@ const socialIcons = ({}: socialIconsProps) => {
 				styles={{
 					cursor: "pointer",
 				}}
-				width={Boolean(viewport > 0 && viewport >= 1000) && 60}
+				width={Boolean(viewport > 0 && viewport >= 1000) ? 60 : 48}
 				href="https://github.com/igloo1505"
 			/>
 			<LinkedIn
@@ -119,7 +119,7 @@ const socialIcons = ({}: socialIconsProps) => {
 				styles={{
 					cursor: "pointer",
 				}}
-				width={Boolean(viewport > 0 && viewport >= 1000) && 60}
+				width={Boolean(viewport > 0 && viewport >= 1000) ? 60 : 48}
 				href="https://www.linkedin.com/in/andrew-m-689626198"
 			/>
 			<Connect
@@ -127,7 +127,7 @@ const socialIcons = ({}: socialIconsProps) => {
 				styles={{
 					cursor: "pointer",
 				}}
-				width={Boolean(viewport > 0 && viewport >= 1000) && 60}
+				width={Boolean(viewport > 0 && viewport >= 1000) ? 60 : 48}
 				href="https://portfolio-77m0vgqw3-igloodevelopment.vercel.app/"
 			/>
 		</div>
