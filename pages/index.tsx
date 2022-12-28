@@ -2,9 +2,8 @@
 import { useEffect } from "react";
 import DrawerResponsiveCenter from "../components/layout/DrawerResponsiveCenter";
 import Hero from "../components/landing/Hero";
-import Backdrop from "../public/assets/questionableBackdrop.jpg";
-import Image from "next/image";
 import { setDrawerListener } from "../state/actions";
+import SectionTwo from "../components/landing/SectionTwo";
 
 const Home = () => {
 	useEffect(() => {
@@ -16,6 +15,7 @@ const Home = () => {
 	return (
 		<DrawerResponsiveCenter additionalClasses="justify-center md:justify-start">
 			<Hero />
+			<SectionTwo />
 		</DrawerResponsiveCenter>
 	);
 };
