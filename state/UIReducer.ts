@@ -33,6 +33,16 @@ const UIReducer = createReducer(initialState, (builder) => {
 			toast: {} as ToastConfig,
 		};
 	});
+	builder.addCase(
+		"SET-GRID-CARD-EXPANDED",
+		(state, action: Types.SET_GRID_CARD_EXPANDED) => {
+			return {
+				...state,
+				landingGridCardExpanded:
+					typeof action?.payload === "undefined" ? false : action.payload,
+			};
+		}
+	);
 });
 
 export default UIReducer;

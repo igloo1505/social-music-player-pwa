@@ -6,6 +6,7 @@ const initialState = {
 		drawer: {
 			isOpen: false,
 		},
+		landingGridCardExpanded: false as boolean | string | undefined,
 	},
 };
 
