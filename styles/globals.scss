@@ -106,6 +106,15 @@ $drawer-close-transition: 0.35s ease-in-out;
 	}
 }
 
+.richText {
+	strong {
+		color: #5cb8e4;
+	}
+	.italicize {
+		font-style: italic;
+	}
+}
+
 // .inner-hero-container {
 // 	transform: translateY(0);
 // }

@@ -30,7 +30,7 @@ export class LandingGridCardProps {
 				`Contracted body length is not within range. Found length of ${this.body.contracted.length}`
 			);
 		}
-		if (this.body.expanded.length <= 150 || this.body.expanded.length >= 600) {
+		if (this.body.expanded.length <= 150 || this.body.expanded.length >= 1500) {
 			console.error("LandingGridCardProps expanded body length error");
 			throw new Error(
 				`Expanded body length is not within range. Found length of ${this.body.expanded.length}`

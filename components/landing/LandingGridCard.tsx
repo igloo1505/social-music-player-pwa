@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
+import DepthOverlay from "../layout/DepthOverlay";
 import { LandingGridCardProps } from "../../types/LandingGridCardProps";
 import { connect, useDispatch } from "react-redux";
 import { RootState } from "../../state/store";
@@ -8,24 +9,6 @@ import gsap from "gsap";
 const connector = connect((state: RootState, props) => ({
 	currentlyExpanded: state.UI.landingGridCardExpanded,
 }));
-
-const DepthOverlay = ({
-	opacity,
-	extraStyles = {},
-}: {
-	opacity: number;
-	extraStyles?: object;
-}) => {
-	return (
-		<div
-			className="absolute h-full w-full bg-white"
-			style={{
-				opacity: opacity,
-				...extraStyles,
-			}}
-		></div>
-	);
-};
 
 type propType = LandingGridCardProps & {
 	currentlyExpanded: string | boolean | undefined;
@@ -45,17 +28,20 @@ const LandingGridCard = connector(
 		const [iconShouldTranslate, setIconShouldTranslate] = useState(false);
 		const [isHovered, setIsHovered] = useState(false);
 		const [isExpanded, setIsExpanded] = useState(false);
-		const [scrollListener, setScrollListener] = useState();
+		const [initialRect, setInitialRect] = useState<DOMRect | null>(null);
 		useEffect(() => {
 			setIsExpanded(currentlyExpanded === _key);
 		}, [currentlyExpanded]);
 
 		useEffect(() => {
 			if (isExpanded) {
-				let listenerId = animateExpand(cardContainerId);
+				let _initialRect = animateExpand(cardContainerId);
+				if (_initialRect) {
+					setInitialRect(_initialRect);
+				}
 			}
 			if (!isExpanded) {
-				animateContract(cardContainerId);
+				animateContract(cardContainerId, initialRect);
 			}
 		}, [isExpanded]);
 
@@ -104,7 +90,7 @@ const LandingGridCard = connector(
 					</TopLevelPortal>
 				)}
 				<div
-					className="text-purple-700 flex flex-col px-4 justify-start items-center cursor-pointer bg-main-background-color z-10 w-full h-full relative"
+					className="text-purple-700 flex flex-col px-4 justify-start items-center cursor-pointer bg-main-background-color w-full h-full relative z-[9999]"
 					id={cardContainerId}
 					style={{
 						borderRadius: iconShouldTranslate ? "8px" : "0px",
@@ -156,21 +142,28 @@ const LandingGridCard = connector(
 								opacity: isHovered && !isExpanded ? 0.8 : isExpanded ? 1 : 0.2,
 							}}
 						/>
-						{isExpanded ? (
-							<div
-								className="text-white text-center opacity-0"
-								id={`${cardContainerId}-expanded`}
-							>
-								{expanded}
-							</div>
-						) : (
-							<div
-								className="text-white text-center opacity-0"
-								id={`${cardContainerId}-contracted`}
-							>
-								{contracted}
-							</div>
-						)}
+						<div
+							className="relative w-full h-full"
+							id={`${cardContainerId}-text-container`}
+						>
+							{isExpanded ? (
+								<div
+									className="text-white text-left indent-3 richText"
+									id={`${cardContainerId}-expanded`}
+									dangerouslySetInnerHTML={{ __html: expanded }}
+									style={{
+										opacity: 0,
+									}}
+								/>
+							) : (
+								<div
+									className="text-white text-center opacity-0"
+									id={`${cardContainerId}-contracted`}
+								>
+									{contracted}
+								</div>
+							)}
+						</div>
 					</div>
 					<DepthOverlay
 						opacity={iconShouldTranslate ? (isHovered ? 0.07 : 0.1) : 0.05}
@@ -195,37 +188,41 @@ const getRect = (id: string): false | DOMRect => {
 	return rect;
 };
 
-const animateExpand = (id: string) => {
+const animateExpand = (id: string): DOMRect | void => {
 	if (typeof window === "undefined") return;
 	let rect: DOMRect | boolean = getRect(id);
 	if (!rect) return;
+	let tl = gsap.timeline();
 	let vp = { width: window.innerWidth, height: window.innerHeight };
+	let newWidth = vp.width * 0.8;
+	let newHeight_sorta = (rect.width * rect.height) / newWidth;
 	let targetLeft = vp.width / 2 - rect.width / 2;
-	let targetTop = vp.height / 2 - rect.height / 2;
+	let targetTop = vp.height / 2 - newHeight_sorta / 2;
 	let currentLeft = rect.left;
 	let currentTop = rect.top;
-	console.log(targetLeft, rect);
-	let tl = gsap.timeline();
 	tl.to(`#${id}`, {
 		x: targetLeft - currentLeft,
 		y: targetTop - currentTop,
+		width: `${newWidth}px`,
+		height: `${newHeight_sorta}px`,
 	});
-	gsap.to(`#${id}-expanded`, {
+	tl.to(`#${id}-expanded`, {
 		opacity: 1,
 	});
+	return rect;
 };
 
-const animateContract = (id: string) => {
+const animateContract = (id: string, initialRect: DOMRect | null) => {
+	console.log("initialRect: ", Boolean(initialRect), initialRect);
 	if (typeof window === "undefined") return;
-	let rect: DOMRect | boolean = getRect(id);
-	if (!rect) return;
-	let vp = { width: window.innerWidth, height: window.innerHeight };
-	// let targetLeft = vp.width / 2 - rect.width / 2;
-	// console.log(targetLeft, rect);
 	let tl = gsap.timeline();
 	tl.to(`#${id}`, {
 		x: 0,
 		y: 0,
+		...(initialRect && {
+			width: initialRect.width,
+			height: initialRect.height,
+		}),
 	});
 	gsap.to(`#${id}-contracted`, {
 		opacity: 1,
