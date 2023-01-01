@@ -29,6 +29,26 @@ const LandingGridCard = connector(
 		const [isHovered, setIsHovered] = useState(false);
 		const [isExpanded, setIsExpanded] = useState(false);
 		const [initialRect, setInitialRect] = useState<DOMRect | null>(null);
+		const [isInitialRender, setIsInitialRender] = useState(true);
+		const setContractedContainerHeight = () => {
+			if (isExpanded) return;
+			let container = document.getElementById(
+				`${cardContainerId}-text-container`
+			);
+			let contracted = document.getElementById(`${cardContainerId}-contracted`);
+			if (!container || !contracted) return;
+			container.style.height = `${
+				contracted.getBoundingClientRect().height + 16
+			}px`;
+		};
+		useEffect(() => {
+			if (typeof window === "undefined") return;
+			if (isInitialRender) {
+				setIsInitialRender(false);
+				setContractedContainerHeight();
+				window.addEventListener("resize", setContractedContainerHeight);
+			}
+		}, []);
 		useEffect(() => {
 			setIsExpanded(currentlyExpanded === _key);
 		}, [currentlyExpanded]);
@@ -138,7 +158,6 @@ const LandingGridCard = connector(
 								backgroundColor: Boolean(isHovered || isExpanded)
 									? "#5CB8E4"
 									: "#fff",
-								// opacity: isHovered ? (isExpanded ? 1 : 0.8) : 0.2,
 								opacity: isHovered && !isExpanded ? 0.8 : isExpanded ? 1 : 0.2,
 							}}
 						/>
@@ -146,23 +165,21 @@ const LandingGridCard = connector(
 							className="relative w-full h-full"
 							id={`${cardContainerId}-text-container`}
 						>
-							{isExpanded ? (
-								<div
-									className="text-white text-left indent-3 richText"
-									id={`${cardContainerId}-expanded`}
-									dangerouslySetInnerHTML={{ __html: expanded }}
-									style={{
-										opacity: 0,
-									}}
-								/>
-							) : (
-								<div
-									className="text-white text-center opacity-0"
-									id={`${cardContainerId}-contracted`}
-								>
-									{contracted}
-								</div>
-							)}
+							<div
+								className="absolute text-white text-left indent-3 richText"
+								id={`${cardContainerId}-expanded`}
+								dangerouslySetInnerHTML={{ __html: expanded }}
+								style={{
+									opacity: 0,
+								}}
+							/>
+							<div
+								className="absolute text-white text-center"
+								id={`${cardContainerId}-contracted`}
+								style={{ opacity: 0 }}
+							>
+								{contracted}
+							</div>
 						</div>
 					</div>
 					<DepthOverlay
@@ -191,15 +208,22 @@ const getRect = (id: string): false | DOMRect => {
 const animateExpand = (id: string): DOMRect | void => {
 	if (typeof window === "undefined") return;
 	let rect: DOMRect | boolean = getRect(id);
-	if (!rect) return;
+	let xRect: DOMRect | boolean = getRect(`${id}-expanded`);
+	let cRect: DOMRect | boolean = getRect(`${id}-contracted`);
+	if (!rect || !xRect || !cRect) return;
 	let tl = gsap.timeline();
 	let vp = { width: window.innerWidth, height: window.innerHeight };
 	let newWidth = vp.width * 0.8;
-	let newHeight_sorta = (rect.width * rect.height) / newWidth;
+	newWidth >= 980 && (newWidth = 980);
+	let newHeight_sorta =
+		(xRect.width * xRect.height) / newWidth + (rect.height - cRect.height + 16);
 	let targetLeft = vp.width / 2 - rect.width / 2;
 	let targetTop = vp.height / 2 - newHeight_sorta / 2;
 	let currentLeft = rect.left;
 	let currentTop = rect.top;
+	tl.to(`#${id}-contracted`, {
+		opacity: 0,
+	});
 	tl.to(`#${id}`, {
 		x: targetLeft - currentLeft,
 		y: targetTop - currentTop,
@@ -213,9 +237,11 @@ const animateExpand = (id: string): DOMRect | void => {
 };
 
 const animateContract = (id: string, initialRect: DOMRect | null) => {
-	console.log("initialRect: ", Boolean(initialRect), initialRect);
 	if (typeof window === "undefined") return;
 	let tl = gsap.timeline();
+	tl.to(`#${id}-expanded`, {
+		opacity: 0,
+	});
 	tl.to(`#${id}`, {
 		x: 0,
 		y: 0,
@@ -224,7 +250,7 @@ const animateContract = (id: string, initialRect: DOMRect | null) => {
 			height: initialRect.height,
 		}),
 	});
-	gsap.to(`#${id}-contracted`, {
+	tl.to(`#${id}-contracted`, {
 		opacity: 1,
 	});
 };

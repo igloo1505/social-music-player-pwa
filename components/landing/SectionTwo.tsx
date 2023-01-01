@@ -1,17 +1,15 @@
 import React, { MouseEventHandler } from "react";
 import gridCardData from "../../data-static/LandingGridCardData";
 import LandingGridCard from "./LandingGridCard";
-import clsx from "clsx";
 
 interface SectionTwoProps {}
 
 const SectionTwo = ({}: SectionTwoProps) => {
-	
 	const handleSectionTwoClick: MouseEventHandler = (e) => {
 		if (typeof window === "undefined") {
 			return;
 		}
-		let em = document.getElementById("grid-column-container");
+		let em = document.getElementById("autoscroll-whatWeDo-button");
 		if (!em) return;
 		em.scrollIntoView();
 	};
@@ -24,6 +22,7 @@ const SectionTwo = ({}: SectionTwoProps) => {
 			<button
 				onClick={handleSectionTwoClick}
 				className={"mb-10 font-bold text-lg transformUnderlineContainer"}
+				id="autoscroll-whatWeDo-button"
 			>
 				What we do
 				<div className="hover-underline bg-brand-mid" />
