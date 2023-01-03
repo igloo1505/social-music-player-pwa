@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import HeroMedia from "./HeroMedia";
 import SocialIcons from "../brand/SocialIcons";
 import gsap from "gsap";
+import SplineSocialButtons from "../brand/SplineSocialButton";
 interface HeroProps {}
 
 const Hero = ({}: HeroProps) => {
@@ -13,7 +14,7 @@ const Hero = ({}: HeroProps) => {
 			className="flex flex-col items-center justify-start sm:justify-center h-full mx-2 mt-10 sm:grid sm:grid-cols-hero-media-large sm:place-items-center min-h-[80vh] sm:min-h-unset"
 			style={{ width: "calc(100vw - 2rem)" }}
 		>
-			<div className="flex flex-col items-center justify-start sm:justify-center h-full gap-3 sm:gap-2 sm:ml-auto w-fit mdlg:justify-center lgish:gap-4 inner-hero-container">
+			<div className="flex flex-col items-center justify-start sm:justify-center h-full gap-3 sm:gap-2 sm:ml-auto w-fit mdlg:justify-center lgish:gap-4 inner-hero-container z-10">
 				<div className="font-serif text-5xl lg:text-6xl tracking-wider text-center text-whiter w-fit mdlg:text-left lgish:text-7xl">
 					{String("Integrand Media")
 						.split("")
@@ -46,12 +47,13 @@ const Hero = ({}: HeroProps) => {
 						})}
 				</div>
 				<div
+					className="w-full"
 					style={{
 						transform: "translateY(-50px)",
 					}}
-					className="social-icons-container"
+					id="social-icons-container"
 				>
-					<SocialIcons />
+					<SplineSocialButtons />
 				</div>
 			</div>
 			<HeroMedia />
@@ -70,7 +72,7 @@ const animateTextEntrance = () => {
 		stagger: 0.1,
 	});
 	tl.to(
-		".social-icons-container",
+		"#social-icons-container",
 		{
 			y: 0,
 			// opacity: 1,

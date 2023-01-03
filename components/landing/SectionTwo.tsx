@@ -21,7 +21,7 @@ const SectionTwo = ({}: SectionTwoProps) => {
 		>
 			<button
 				onClick={handleSectionTwoClick}
-				className={"mb-10 font-bold text-lg transformUnderlineContainer"}
+				className={"mb-12 font-bold text-lg transformUnderlineContainer"}
 				id="autoscroll-whatWeDo-button"
 			>
 				What we do

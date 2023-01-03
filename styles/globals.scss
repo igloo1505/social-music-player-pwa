@@ -2,6 +2,8 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+$socialButtonAspectRatio: 2.87209302;
+
 * {
 	box-sizing: border-box;
 }
@@ -106,13 +108,32 @@ $drawer-close-transition: 0.35s ease-in-out;
 	}
 }
 
-.richText {
-	strong {
-		color: #5cb8e4;
+#reactAndNext-grid-card-text-container {
+	.richText {
+		strong {
+			color: #5cb8e4;
+		}
+		.italicize {
+			font-style: italic;
+		}
 	}
-	.italicize {
-		font-style: italic;
+}
+#nodejs-grid-card-text-container {
+	.richText {
+		strong {
+			color: #22c55e;
+		}
+		.italicize {
+			font-style: italic;
+		}
 	}
+}
+
+#social-canvas-container {
+	// canvas {
+	// width: 300px !important;
+	// height: calc(300px / $socialButtonAspectRatio) !important;
+	// }
 }
 
 // .inner-hero-container {

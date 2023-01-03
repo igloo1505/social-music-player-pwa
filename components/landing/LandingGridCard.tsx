@@ -20,6 +20,7 @@ const LandingGridCard = connector(
 		Icon,
 		body: { contracted, expanded },
 		_key,
+		accentColor,
 		currentlyExpanded,
 	}: propType) => {
 		const dispatch = useDispatch();
@@ -110,7 +111,7 @@ const LandingGridCard = connector(
 					</TopLevelPortal>
 				)}
 				<div
-					className="text-purple-700 flex flex-col px-4 justify-start items-center cursor-pointer bg-main-background-color w-full h-full relative z-[9999]"
+					className="text-purple-700 flex flex-col px-4 justify-start items-center cursor-pointer bg-main-background-color w-full relative z-[9999]"
 					id={cardContainerId}
 					style={{
 						borderRadius: iconShouldTranslate ? "8px" : "0px",
@@ -156,7 +157,7 @@ const LandingGridCard = connector(
 								transform: `scaleX(${iconShouldTranslate ? 1 : 0})`,
 								transition: "all 0.5s ease-in-out",
 								backgroundColor: Boolean(isHovered || isExpanded)
-									? "#5CB8E4"
+									? accentColor
 									: "#fff",
 								opacity: isHovered && !isExpanded ? 0.8 : isExpanded ? 1 : 0.2,
 							}}
@@ -221,18 +222,31 @@ const animateExpand = (id: string): DOMRect | void => {
 	let targetTop = vp.height / 2 - newHeight_sorta / 2;
 	let currentLeft = rect.left;
 	let currentTop = rect.top;
+	gsap.to(`#${id}`, {
+		zIndex: 99999,
+		immediateRender: true,
+		duration: 0,
+	});
 	tl.to(`#${id}-contracted`, {
 		opacity: 0,
+		duration: 0.2,
 	});
 	tl.to(`#${id}`, {
 		x: targetLeft - currentLeft,
 		y: targetTop - currentTop,
 		width: `${newWidth}px`,
 		height: `${newHeight_sorta}px`,
+		duration: 1,
+		ease: "elastic.out(1, 0.7)",
 	});
-	tl.to(`#${id}-expanded`, {
-		opacity: 1,
-	});
+	tl.to(
+		`#${id}-expanded`,
+		{
+			opacity: 1,
+			duration: 0.2,
+		},
+		"-=0.35"
+	);
 	return rect;
 };
 
@@ -241,6 +255,7 @@ const animateContract = (id: string, initialRect: DOMRect | null) => {
 	let tl = gsap.timeline();
 	tl.to(`#${id}-expanded`, {
 		opacity: 0,
+		duration: 0.2,
 	});
 	tl.to(`#${id}`, {
 		x: 0,
@@ -249,8 +264,20 @@ const animateContract = (id: string, initialRect: DOMRect | null) => {
 			width: initialRect.width,
 			height: initialRect.height,
 		}),
+		duration: 1,
+		ease: "elastic.out(1, 0.7)",
 	});
-	tl.to(`#${id}-contracted`, {
-		opacity: 1,
+	tl.to(
+		`#${id}-contracted`,
+		{
+			opacity: 1,
+			duration: 0.2,
+		},
+		"-=0.35"
+	);
+	tl.to(`#${id}`, {
+		zIndex: 9999,
+		duration: 0,
+		// immediateRender: true,
 	});
 };

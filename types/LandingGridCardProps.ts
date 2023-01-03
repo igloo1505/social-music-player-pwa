@@ -11,7 +11,8 @@ export class LandingGridCardProps {
 			expanded: string;
 		},
 		public Icon: React.ReactNode | JSX.Element,
-		public _key: string
+		public _key: string,
+		public accentColor: string
 	) {
 		console.log(this.title);
 		if (this.title.length <= 5 || this.title.length >= 30) {
