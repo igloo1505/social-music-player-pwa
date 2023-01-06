@@ -5,7 +5,6 @@ import { PerspectiveCamera, Preload, Grid } from "@react-three/drei";
 import Earth from "./Earth";
 import { Light } from "three";
 import { Renderer } from "three";
-
 interface AlienInvasionProps {}
 
 const AlienInvasion = ({}: AlienInvasionProps) => {
@@ -16,7 +15,7 @@ const AlienInvasion = ({}: AlienInvasionProps) => {
 			<Suspense fallback={null}>
 				<Preload all />
 				<PerspectiveCamera makeDefault position={[0, 0, 2.5]} />
-				<directionalLight intensity={0.5} position={[-3, 1.4, 0]} />
+				<directionalLight intensity={1} position={[-3, 1.4, 0]} />
 				<Earth />
 			</Suspense>
 		</Canvas>

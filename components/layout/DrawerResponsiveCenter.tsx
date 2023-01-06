@@ -21,7 +21,12 @@ const DrawerResponsiveCenter = ({
 	additionalClasses = "",
 	extraStyles = {},
 }: DrawerResponsiveCenterProps) => {
-	const [styles, setStyles] = useState(extraStyles);
+	const [styles, setStyles] = useState({
+		// background: rgb(26,25,26);
+		background:
+			"linear-gradient(146deg, rgba(26,25,26,1) 48%, rgba(0,0,0,1) 100%)",
+		...extraStyles,
+	});
 	const [hasRendered, setHasRendered] = useState(false);
 	const setDimensions = (overrideTransition?: boolean): void => {
 		let em = document.getElementById("drawer-outer-container");
