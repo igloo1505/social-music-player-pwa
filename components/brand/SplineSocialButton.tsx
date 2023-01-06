@@ -73,7 +73,7 @@ const SplineSocialButtons = ({}: SplineSocialButtonsProps) => {
 			<Spline
 				scene={"/assets/spline/socialButtonPanel.splinecode"}
 				onLoad={onLoad}
-				className="absolute"
+				className="absolute -z-10"
 				id="social-canvas"
 				style={{
 					width: `${300}px`,
@@ -97,7 +97,7 @@ const SplineSocialButtons = ({}: SplineSocialButtonsProps) => {
 					href="https://github.com/igloo1505"
 					target="_blank"
 					id="social-canvas-listener-left"
-					className="cursor-pointer"
+					className="cursor-pointer z-[9999]"
 					onMouseEnter={() => handleMouseEnter("github")}
 					onMouseLeave={() => handleMouseLeave("github")}
 					style={hoverStyles}
@@ -106,7 +106,7 @@ const SplineSocialButtons = ({}: SplineSocialButtonsProps) => {
 					href="https://www.linkedin.com/in/andrew-m-689626198"
 					target="_blank"
 					id="social-canvas-listener-center"
-					className="cursor-pointer"
+					className="cursor-pointer z-[9999]"
 					onMouseEnter={() => handleMouseEnter("linkedIn")}
 					onMouseLeave={() => handleMouseLeave("linkedIn")}
 					style={hoverStyles}
@@ -114,7 +114,7 @@ const SplineSocialButtons = ({}: SplineSocialButtonsProps) => {
 				<a
 					href="mailto:aiglinski414@gmail.com"
 					id="social-canvas-listener-right"
-					className="cursor-pointer"
+					className="cursor-pointer z-[9999]"
 					onMouseEnter={() => handleMouseEnter("share")}
 					onMouseLeave={() => handleMouseLeave("share")}
 					style={hoverStyles}

@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import "../styles/globals.scss";
 import type { AppProps } from "next/app";
 import Drawer from "../components/layout/Drawer";

@@ -71,7 +71,7 @@ $drawer-close-transition: 0.35s ease-in-out;
 }
 
 .responsiveCenteredDrawerContainer {
-	transition: all $drawer-open-transition;
+	transition: transform $drawer-open-transition;
 }
 
 .toast-container-warning {

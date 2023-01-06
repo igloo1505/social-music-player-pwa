@@ -21,11 +21,17 @@ const NavbarButtons = ({}: NavbarButtonsProps) => {
 		},
 	];
 	return (
-		<div className="flex flex-row gap-2 mr-3">
+		<div
+			className="flex flex-row gap-2 mr-3 opacity-1 h-full w-fit px-5 justify-center items-center"
+			id="navbar-buttons-right"
+		>
 			{links.map((l, i) => {
 				const { text } = l;
 				return (
-					<div className="text-white cursor-pointer" key={`navbar-link-${i}`}>
+					<div
+						className="text-white cursor-pointer p-3"
+						key={`navbar-link-${i}`}
+					>
 						<a {...l} className="hidden sm:block">
 							{text}
 						</a>

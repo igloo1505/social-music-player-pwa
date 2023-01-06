@@ -66,7 +66,7 @@ const Drawer = ({ drawer: { isOpen } }: DrawerProps) => {
 		<Fragment>
 			<div
 				className={clsx(
-					"fixed top-0 left-0 h-screen bg-transparent w-fit min-w-[220px] flex flex-col justify-start items-center z-[1000] pt-14 gap-3",
+					"fixed top-5 md:top-0 left-0 h-screen bg-transparent w-fit min-w-[220px] flex flex-col justify-start items-center z-[9999] pt-14 gap-3",
 					isOpen ? "drawerTranslateX0" : "drawerTranslateXLeft"
 				)}
 				id="drawer-outer-container"
@@ -110,8 +110,9 @@ const animateOpen = () => {
 	let tl = gsap.timeline();
 	tl.to(".drawer-floating-option", {
 		x: 0,
-		duration: 0.35,
+		duration: 1,
 		stagger: 0.1,
+		ease: "elastic.out(1, 0.7)",
 	});
 };
 

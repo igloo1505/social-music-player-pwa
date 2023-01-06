@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from "react";
-import HeroMedia from "./HeroMedia";
-import SocialIcons from "../brand/SocialIcons";
 import gsap from "gsap";
 import SplineSocialButtons from "../brand/SplineSocialButton";
 import { useDispatch } from "react-redux";
 import { connect } from "react-redux";
 import { RootState } from "../../state/store";
-import IntegralSymbol_spline from "../brand/IntegralSymbol_spline";
-import { transform } from "typescript";
 import clsx from "clsx";
 import HeroRight from "./HeroRight";
+import initialState from "../../state/initialState";
 
 const connector = connect((state: RootState, props) => ({
 	gridCardOpen: state.UI.landingGridCardExpanded,
+	dims: state.UI.dimensions,
 }));
 
 interface HeroProps {
 	gridCardOpen: boolean | string | undefined;
+	dims: typeof initialState.UI.dimensions;
 }
 
-const Hero = connector(({ gridCardOpen }: HeroProps) => {
+const Hero = connector(({ gridCardOpen, dims }: HeroProps) => {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		if (typeof window === "undefined") return;
@@ -33,36 +32,56 @@ const Hero = connector(({ gridCardOpen }: HeroProps) => {
 			});
 		}
 	};
-
 	return (
 		<div
-			className="flex flex-col items-center justify-start sm:justify-center h-full mx-2 mt-10 sm:grid sm:grid-cols-hero-media-large sm:place-items-center min-h-[80vh] sm:min-h-unset"
-			style={{ width: "calc(100vw - 2rem)" }}
+			className="flex flex-col items-center justify-start sm:justify-center h-full w-full mx-2 md:mx-0 mt-16  md:mt-0 md:grid md:place-items-center min-h-[80vh] md:min-h-unset"
+			style={{ width: "calc(100vw - 2rem)", gridTemplateColumns: "auto 1fr" }}
 			onClick={closeGridCard}
 		>
-			<div className="flex flex-col items-center justify-start sm:justify-center h-full gap-3 sm:gap-2 sm:ml-auto w-fit mdlg:justify-center lgish:gap-4 inner-hero-container z-10">
-				<div className="font-serif text-5xl lg:text-6xl tracking-wider text-center text-whiter w-fit mdlg:text-left lgish:text-7xl">
-					{String("∫ntegrand Media")
-						.split("")
-						.map((l, i) => {
-							return (
-								<span
-									key={`top-letter-iteration-${i}`}
-									className={clsx(
-										"top-iteration-letter opacity-0 select-none",
-										i === 0 && "text-7xl lg:text-8xl lgish:text-9xl"
-									)}
-									style={{
-										transform: "translateX(-50px)",
-										...(i === 0 && {
-											marginRight: "8px",
-										}),
-									}}
-								>
-									{l}
-								</span>
-							);
-						})}
+			<div className="flex flex-col items-center justify-start sm:justify-center h-full gap-3 sm:gap-2 w-fit inner-hero-container md:px-[2rem]">
+				<div className="font-serif text-5xl lg:text-6xl tracking-wider text-center text-whiter w-fit mdlg:text-left lgish:text-7xl flex flex-col justify-center items-end px-4">
+					<div className="inline-block" id="title-translate-left">
+						{String("∫ntegrand")
+							.split("")
+							.map((l, i) => {
+								return (
+									<span
+										key={`top-letter-iteration-${i}`}
+										className={clsx(
+											"top-iteration-letter opacity-0 select-none",
+											i === 0 && "text-7xl lg:text-8xl lgish:text-9xl"
+										)}
+										style={{
+											transform: "translateX(-50px)",
+											...(i === 0 && {
+												marginRight: "8px",
+											}),
+										}}
+									>
+										{l}
+									</span>
+								);
+							})}
+					</div>
+					<div className="inline-block" id="title-translate-right">
+						{String(" Media")
+							.split("")
+							.map((l, i) => {
+								return (
+									<span
+										key={`top-letter-iteration-${i}`}
+										className={clsx(
+											"top-iteration-letter opacity-0 select-none"
+										)}
+										style={{
+											transform: "translateX(-50px)",
+										}}
+									>
+										{l}
+									</span>
+								);
+							})}
+					</div>
 				</div>
 				<div className="text-2xl text-center text-white w-fit lgish:text-3xl">
 					{String("The New Age is now.")
@@ -79,7 +98,7 @@ const Hero = connector(({ gridCardOpen }: HeroProps) => {
 						})}
 				</div>
 				<div
-					className="w-full transition-all duration-500"
+					className="w-full transition-all duration-500 z-[9999]"
 					style={{
 						transform: "translateY(-50px)",
 						opacity: 0,
@@ -114,16 +133,20 @@ const animateTextEntrance = () => {
 		stagger: 0.1,
 	});
 	setTimeout(animatePanelEntrance, 650);
-	// animatePanelEntrance();
-	// tl.to(
-	// 	"#social-icons-container",
-	// 	{
-	// 		y: 0,
-	// 		opacity: 1,
-	// 		duration: 0.5,
-	// 	},
-	// 	"-=0.2"
-	// );
+	tl.to("#title-translate-left", {
+		x: -20,
+		duration: 0.35,
+		ease: "power3.out",
+	});
+	tl.to(
+		"#title-translate-right",
+		{
+			x: 20,
+			duration: 0.35,
+			ease: "power3.out",
+		},
+		"+=0.3"
+	);
 	tl.to(".bottom-iteration-letter", {
 		y: 0,
 		opacity: 1,

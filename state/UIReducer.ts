@@ -15,6 +15,24 @@ const UIReducer = createReducer(initialState, (builder) => {
 			toast: action.payload,
 		};
 	});
+	builder.addCase(
+		"SET_CANVAS_RENDERED",
+		(state, action: Types.SET_CANVAS_RENDERED) => {
+			return {
+				...state,
+				canvasRendered: action.payload,
+			};
+		}
+	);
+	builder.addCase("SET_VIEWPORT", (state, action: Types.SET_VIEWPORT) => {
+		return {
+			...state,
+			dimensions: {
+				...state.dimensions,
+				...action.payload,
+			},
+		};
+	});
 
 	builder.addCase("TOGGLE_DRAWER", (state, action: Types.TOGGLE_DRAWER) => {
 		return {
