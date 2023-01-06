@@ -4,6 +4,7 @@ import { useFrame, useLoader } from "@react-three/fiber";
 import { Sphere, useTexture, Float, useGLTF } from "@react-three/drei";
 import { TextureLoader, DoubleSide } from "three";
 import GetThreeJsInfo from "./GetThreeJsInfo";
+import IlluminatedCities from "./IlluminatedCities";
 const EarthTexture = "/threeJs/Earth-texture.jpeg";
 const EarthNormal = "/threeJs/Earth_NormalNRM_6k.jpg";
 const EarthGloss = "/threeJs/Earth_Glossiness_6k.jpg";
@@ -14,6 +15,7 @@ const rotationPeriod = 180;
 const Earth = (props: any) => {
 	const earthRef = useRef();
 	const cloudsRef = useRef();
+	const citiesRef = useRef();
 	const [colorMap, normalMap, specularMap, cloudsMap, glossMap] = useLoader(
 		TextureLoader,
 		[EarthTexture, EarthNormal, EarthSpecular, Earth_Clouds, EarthGloss]
@@ -36,7 +38,8 @@ const Earth = (props: any) => {
 				floatIntensity={1} // Up/down float intensity, works like a multiplier with floatingRange,defaults to 1
 				floatingRange={[-0.05, 0.05]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
 			>
-				<Sphere receiveShadow args={[1.01, 32, 32]} ref={cloudsRef}>
+				<IlluminatedCities ref={citiesRef} />
+				<Sphere receiveShadow args={[1.015, 32, 32]} ref={cloudsRef}>
 					<meshPhongMaterial
 						map={cloudsMap}
 						opacity={0.4}
