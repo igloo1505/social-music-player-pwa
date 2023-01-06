@@ -28,7 +28,7 @@ const SectionTwo = ({}: SectionTwoProps) => {
 				<div className="hover-underline bg-brand-mid" />
 			</button>
 			<div
-				className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-11/12 place-items-center min-h-[150px] gap-3"
+				className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-11/12 place-items-center min-h-[150px] gap-10 md:gap-3"
 				id="grid-column-container"
 			>
 				{gridCardData.map((d, i) => (

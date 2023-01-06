@@ -75,10 +75,9 @@ const DrawerResponsiveCenter = ({
 				c && (c.style.transition = tra);
 			}, 500);
 		}
-		dims.viewport.width <= 768 && (isOpen = false);
 		setStyles({
 			...styles,
-			width: isOpen ? `${W - w}px` : `${W}px`,
+			width: `${W}px`,
 			minHeight: `${H - N}px`,
 			top: `${N * 0.3}px`,
 			opacity: 1,
@@ -92,7 +91,7 @@ const DrawerResponsiveCenter = ({
 		}
 		setDimensions(!hasRendered);
 		window.addEventListener("resize", () => setDimensions(true));
-	}, [isOpen]);
+	}, []);
 
 	return (
 		<div

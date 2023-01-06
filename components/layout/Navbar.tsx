@@ -25,7 +25,6 @@ interface NavbarProps {
 
 const Navbar = connector(
 	({ drawer: { isOpen }, gridCardOpen, dims, canvasRendered }: NavbarProps) => {
-		console.log("dims: ", dims);
 		const router = useRouter();
 		const dispatch = useDispatch();
 		const [haveAddedViewportListener, setHaveAddedViewportListener] =

@@ -66,7 +66,7 @@ const Drawer = ({ drawer: { isOpen } }: DrawerProps) => {
 		<Fragment>
 			<div
 				className={clsx(
-					"fixed top-5 md:top-0 left-0 h-screen bg-transparent w-fit min-w-[220px] flex flex-col justify-start items-center z-[9999] pt-14 gap-3",
+					"fixed top-5 md:top-0 left-0 h-screen bg-transparent w-fit min-w-[220px] flex flex-col justify-start items-center z-[999999] mt-14 gap-3 md:mt-32",
 					isOpen ? "drawerTranslateX0" : "drawerTranslateXLeft"
 				)}
 				id="drawer-outer-container"
@@ -78,7 +78,7 @@ const Drawer = ({ drawer: { isOpen } }: DrawerProps) => {
 							href={d.href}
 							key={`drawer-link-${i}`}
 							onClick={d.action ? d.action : () => {}}
-							className="grid w-10/12 px-2 bg-brand-midDark rounded-xl text-whiter min-h-[40px] drawer-floating-option border border-brand-midDark place-items-center hover:border-white"
+							className="grid w-10/12 px-2 bg-brand-midDark rounded-xl text-whiter min-h-[40px] drawer-floating-option border border-brand-midDark place-items-center hover:border-white z-[999999]"
 							style={{
 								gridTemplateColumns: "40px 1fr",
 							}}
@@ -97,7 +97,7 @@ const Drawer = ({ drawer: { isOpen } }: DrawerProps) => {
 			</div>
 			<div
 				className={clsx(
-					"w-screen fixed top-0 left-0 h-screen z-[950] bg-black bg-opacity-30 transition-opacity duration-200",
+					"w-screen fixed top-0 left-0 h-screen z-[999998] bg-black bg-opacity-30 transition-opacity duration-200",
 					show ? "flex" : "hidden"
 				)}
 				onClick={handleBackdropClick}

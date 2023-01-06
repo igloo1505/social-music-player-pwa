@@ -222,7 +222,7 @@ const animateExpand = (id: string): DOMRect | void => {
 	let newWidth = vp.width * 0.8;
 	newWidth >= 980 && (newWidth = 980);
 	let newHeight_sorta =
-		(xRect.width * xRect.height) / newWidth + (rect.height - cRect.height + 32);
+		(xRect.width * xRect.height) / newWidth + (rect.height - cRect.height + 16);
 	let targetLeft = vp.width / 2 - rect.width / 2;
 	let targetTop = vp.height / 2 - newHeight_sorta / 2;
 	let currentLeft = rect.left;

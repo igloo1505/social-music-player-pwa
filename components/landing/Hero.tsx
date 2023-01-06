@@ -39,7 +39,7 @@ const Hero = connector(({ gridCardOpen, dims }: HeroProps) => {
 			onClick={closeGridCard}
 		>
 			<div className="flex flex-col items-center justify-start sm:justify-center h-full gap-3 sm:gap-2 w-fit inner-hero-container md:px-[2rem]">
-				<div className="font-serif text-5xl lg:text-6xl tracking-wider text-center text-whiter w-fit mdlg:text-left lgish:text-7xl flex flex-col justify-center items-end px-4">
+				<div className="font-serif text-7xl lg:text-7xl tracking-wider text-center text-whiter w-fit mdlg:text-left lgish:text-8xl flex flex-col justify-center items-end px-4">
 					<div className="inline-block" id="title-translate-left">
 						{String("∫ntegrand")
 							.split("")
