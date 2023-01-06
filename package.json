@@ -9,12 +9,18 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@next/bundle-analyzer": "^13.1.1",
+		"@react-spring/three": "^9.6.1",
+		"@react-three/drei": "^9.51.6",
+		"@react-three/fiber": "^8.10.0",
+		"@react-three/rapier": "^0.11.3",
 		"@reduxjs/toolkit": "^1.9.0",
 		"@splinetool/react-spline": "^2.2.5",
 		"@splinetool/runtime": "^0.9.174",
 		"@types/node": "18.11.9",
 		"@types/react": "18.0.25",
 		"@types/react-dom": "18.0.9",
+		"@types/three": "^0.148.0",
 		"axios": "^1.2.0",
 		"bcryptjs": "^2.4.3",
 		"clsx": "^1.2.1",
@@ -35,14 +41,18 @@
 		"react-redux": "^8.0.5",
 		"sass": "^1.56.1",
 		"teenyicons": "^0.4.1",
+		"three": "^0.148.0",
 		"typescript": "4.9.3",
 		"usehooks-ts": "^2.9.1"
 	},
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",
 		"autoprefixer": "^10.4.13",
+		"file-loader": "^6.2.0",
 		"postcss": "^8.4.19",
 		"postcss-import": "^15.0.0",
-		"tailwindcss": "^3.2.4"
+		"raw-loader": "^4.0.2",
+		"tailwindcss": "^3.2.4",
+		"url-loader": "^4.1.1"
 	}
 }

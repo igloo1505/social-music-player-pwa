@@ -5,11 +5,13 @@ import ReactDOM from "react-dom";
 interface ToplevelPortalProps {
 	children: JSX.Element | JSX.Element[];
 	containerStyles?: CSS.Properties;
+	z?: number;
 }
 
 const ToplevelPortal = ({
 	children,
 	containerStyles = {},
+	z = 1,
 }: ToplevelPortalProps) => {
 	const [hasTarget, setHasTarget] = useState<HTMLElement>();
 	const PortalContainer = (
@@ -20,7 +22,7 @@ const ToplevelPortal = ({
 				height: "100vh",
 				top: 0,
 				left: 0,
-				zIndex: 1,
+				zIndex: z,
 				...containerStyles,
 			}}
 		>

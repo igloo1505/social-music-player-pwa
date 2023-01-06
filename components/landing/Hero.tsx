@@ -3,28 +3,60 @@ import HeroMedia from "./HeroMedia";
 import SocialIcons from "../brand/SocialIcons";
 import gsap from "gsap";
 import SplineSocialButtons from "../brand/SplineSocialButton";
-interface HeroProps {}
+import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
+import { RootState } from "../../state/store";
+import IntegralSymbol_spline from "../brand/IntegralSymbol_spline";
+import { transform } from "typescript";
+import clsx from "clsx";
+import HeroRight from "./HeroRight";
 
-const Hero = ({}: HeroProps) => {
+const connector = connect((state: RootState, props) => ({
+	gridCardOpen: state.UI.landingGridCardExpanded,
+}));
+
+interface HeroProps {
+	gridCardOpen: boolean | string | undefined;
+}
+
+const Hero = connector(({ gridCardOpen }: HeroProps) => {
+	const dispatch = useDispatch();
 	useEffect(() => {
+		if (typeof window === "undefined") return;
 		animateTextEntrance();
 	}, []);
+	const closeGridCard = () => {
+		if (gridCardOpen) {
+			dispatch({
+				type: "SET-GRID-CARD-EXPANDED",
+				payload: false,
+			});
+		}
+	};
+
 	return (
 		<div
 			className="flex flex-col items-center justify-start sm:justify-center h-full mx-2 mt-10 sm:grid sm:grid-cols-hero-media-large sm:place-items-center min-h-[80vh] sm:min-h-unset"
 			style={{ width: "calc(100vw - 2rem)" }}
+			onClick={closeGridCard}
 		>
 			<div className="flex flex-col items-center justify-start sm:justify-center h-full gap-3 sm:gap-2 sm:ml-auto w-fit mdlg:justify-center lgish:gap-4 inner-hero-container z-10">
 				<div className="font-serif text-5xl lg:text-6xl tracking-wider text-center text-whiter w-fit mdlg:text-left lgish:text-7xl">
-					{String("Integrand Media")
+					{String("∫ntegrand Media")
 						.split("")
 						.map((l, i) => {
 							return (
 								<span
 									key={`top-letter-iteration-${i}`}
-									className="top-iteration-letter opacity-0 select-none"
+									className={clsx(
+										"top-iteration-letter opacity-0 select-none",
+										i === 0 && "text-7xl lg:text-8xl lgish:text-9xl"
+									)}
 									style={{
 										transform: "translateX(-50px)",
+										...(i === 0 && {
+											marginRight: "8px",
+										}),
 									}}
 								>
 									{l}
@@ -47,21 +79,31 @@ const Hero = ({}: HeroProps) => {
 						})}
 				</div>
 				<div
-					className="w-full"
+					className="w-full transition-all duration-500"
 					style={{
 						transform: "translateY(-50px)",
+						opacity: 0,
 					}}
 					id="social-icons-container"
 				>
 					<SplineSocialButtons />
 				</div>
 			</div>
-			<HeroMedia />
+			<HeroRight />
 		</div>
 	);
-};
+});
 
 export default Hero;
+
+const animatePanelEntrance = () => {
+	setTimeout(() => {
+		let em = document.getElementById("social-icons-container");
+		if (!em) return animatePanelEntrance();
+		em.style.transform = "translateY(0px)";
+		em.style.opacity = "1";
+	}, 500);
+};
 
 const animateTextEntrance = () => {
 	let tl = gsap.timeline();
@@ -71,24 +113,21 @@ const animateTextEntrance = () => {
 		duration: 0.5,
 		stagger: 0.1,
 	});
-	tl.to(
-		"#social-icons-container",
-		{
-			y: 0,
-			// opacity: 1,
-			duration: 0.5,
-			stagger: 0.1,
-		},
-		"-=0.2"
-	);
-	tl.to(
-		".bottom-iteration-letter",
-		{
-			y: 0,
-			opacity: 1,
-			duration: 0.5,
-			stagger: 0.1,
-		},
-		"-=0.2"
-	);
+	setTimeout(animatePanelEntrance, 650);
+	// animatePanelEntrance();
+	// tl.to(
+	// 	"#social-icons-container",
+	// 	{
+	// 		y: 0,
+	// 		opacity: 1,
+	// 		duration: 0.5,
+	// 	},
+	// 	"-=0.2"
+	// );
+	tl.to(".bottom-iteration-letter", {
+		y: 0,
+		opacity: 1,
+		duration: 0.5,
+		stagger: 0.1,
+	});
 };

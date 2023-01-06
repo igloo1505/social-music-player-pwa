@@ -55,7 +55,12 @@ const LandingGridCard = connector(
 		}, [currentlyExpanded]);
 
 		useEffect(() => {
+			if (typeof window === "undefined") return;
+			let em = document.getElementById(cardContainerId);
 			if (isExpanded) {
+				if (em) {
+					em.style.zIndex = "9999";
+				}
 				let _initialRect = animateExpand(cardContainerId);
 				if (_initialRect) {
 					setInitialRect(_initialRect);
@@ -100,9 +105,9 @@ const LandingGridCard = connector(
 		return (
 			<Fragment>
 				{isExpanded && (
-					<TopLevelPortal>
+					<TopLevelPortal z={101}>
 						<div
-							className="w-screen h-screen absolute -z-10 bg-main-background-color opacity-50"
+							className="w-screen h-screen absolute z-[101] bg-main-background-color opacity-50"
 							style={{
 								transform: `scale(${isExpanded ? 1 : 0})`,
 							}}
@@ -111,7 +116,7 @@ const LandingGridCard = connector(
 					</TopLevelPortal>
 				)}
 				<div
-					className="text-purple-700 flex flex-col px-4 justify-start items-center cursor-pointer bg-main-background-color w-full relative z-[9999]"
+					className="text-purple-700 flex flex-col px-4 justify-start items-center cursor-pointer bg-main-background-color w-full relative"
 					id={cardContainerId}
 					style={{
 						borderRadius: iconShouldTranslate ? "8px" : "0px",
@@ -217,7 +222,7 @@ const animateExpand = (id: string): DOMRect | void => {
 	let newWidth = vp.width * 0.8;
 	newWidth >= 980 && (newWidth = 980);
 	let newHeight_sorta =
-		(xRect.width * xRect.height) / newWidth + (rect.height - cRect.height + 16);
+		(xRect.width * xRect.height) / newWidth + (rect.height - cRect.height + 32);
 	let targetLeft = vp.width / 2 - rect.width / 2;
 	let targetTop = vp.height / 2 - newHeight_sorta / 2;
 	let currentLeft = rect.left;
@@ -267,17 +272,12 @@ const animateContract = (id: string, initialRect: DOMRect | null) => {
 		duration: 1,
 		ease: "elastic.out(1, 0.7)",
 	});
-	tl.to(
-		`#${id}-contracted`,
-		{
-			opacity: 1,
-			duration: 0.2,
-		},
-		"-=0.35"
-	);
+	tl.to(`#${id}-contracted`, {
+		opacity: 1,
+		duration: 0.2,
+	});
 	tl.to(`#${id}`, {
-		zIndex: 9999,
+		zIndex: 100,
 		duration: 0,
-		// immediateRender: true,
 	});
 };

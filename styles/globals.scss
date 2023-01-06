@@ -3,6 +3,7 @@
 @import "tailwindcss/utilities";
 
 $socialButtonAspectRatio: 2.87209302;
+$integralAspectRatio: 0.4459279;
 
 * {
 	box-sizing: border-box;
@@ -128,20 +129,7 @@ $drawer-close-transition: 0.35s ease-in-out;
 		}
 	}
 }
-
-#social-canvas-container {
-	// canvas {
-	// width: 300px !important;
-	// height: calc(300px / $socialButtonAspectRatio) !important;
-	// }
+#spline-integral {
+	height: 78px !important;
+	width: calc(78px * $integralAspectRatio) !important;
 }
-
-// .inner-hero-container {
-// 	transform: translateY(0);
-// }
-
-// @media screen and (min-width: 768px) {
-// 	.inner-hero-container {
-// 		transform: translateY(-20vh);
-// 	}
-// }
