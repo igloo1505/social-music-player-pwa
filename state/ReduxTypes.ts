@@ -6,6 +6,8 @@ export type TOGGLE_DRAWER = { type: "TOGGLE_DRAWER"; payload?: boolean };
 
 export type SET_VIEWPORT = { type: "SET_VIEWPORT"; payload?: DOMRect };
 
+export type SET_AUDIO_MUTED = { type: "SET-AUDIO-MUTED"; payload: boolean };
+
 export type HIDE_TOAST = { type: "HIDE_TOAST" };
 
 export type SET_CANVAS_RENDERED = {

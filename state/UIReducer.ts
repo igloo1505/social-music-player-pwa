@@ -61,6 +61,13 @@ const UIReducer = createReducer(initialState, (builder) => {
 			};
 		}
 	);
+
+	builder.addCase("SET-AUDIO-MUTED", (state, action: Types.SET_AUDIO_MUTED) => {
+		return {
+			...state,
+			audioMuted: action.payload,
+		};
+	});
 });
 
 export default UIReducer;

@@ -24,6 +24,7 @@ const initialState = {
 		},
 		canvasRendered: false,
 		landingGridCardExpanded: false as boolean | string | undefined,
+		audioMuted: true,
 	},
 };
 
