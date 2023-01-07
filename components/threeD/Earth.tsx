@@ -5,6 +5,7 @@ import { Sphere, useTexture, Float, useGLTF } from "@react-three/drei";
 import { TextureLoader, DoubleSide } from "three";
 import GetThreeJsInfo from "./GetThreeJsInfo";
 import IlluminatedCities from "./IlluminatedCities";
+import CuriousSpaceship from "./CuriousSpaceship";
 const EarthTexture = "/threeJs/Earth-texture.jpeg";
 const EarthNormal = "/threeJs/Earth_NormalNRM_6k.jpg";
 const EarthGloss = "/threeJs/Earth_Glossiness_6k.jpg";
@@ -33,13 +34,13 @@ const Earth = (props: any) => {
 	return (
 		<group ref={earthRef} {...props} dispose={null}>
 			<Float
-				speed={1} // Animation speed, defaults to 1
-				rotationIntensity={0} // XYZ rotation intensity, defaults to 1
-				floatIntensity={1} // Up/down float intensity, works like a multiplier with floatingRange,defaults to 1
-				floatingRange={[-0.05, 0.05]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
+				speed={1}
+				rotationIntensity={0}
+				floatIntensity={1}
+				floatingRange={[-0.05, 0.05]}
 			>
 				<IlluminatedCities ref={citiesRef} />
-				<Sphere receiveShadow args={[1.015, 32, 32]} ref={cloudsRef}>
+				<Sphere receiveShadow args={[101.5, 32, 32]} ref={cloudsRef}>
 					<meshPhongMaterial
 						map={cloudsMap}
 						opacity={0.4}
@@ -48,7 +49,7 @@ const Earth = (props: any) => {
 						side={DoubleSide}
 					/>
 				</Sphere>
-				<Sphere receiveShadow args={[1, 64, 32]}>
+				<Sphere receiveShadow args={[100, 64, 32]}>
 					<meshPhongMaterial specularMap={specularMap} />
 					<meshStandardMaterial
 						map={colorMap}

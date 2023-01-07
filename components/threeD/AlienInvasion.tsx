@@ -1,17 +1,22 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { PerspectiveCamera, Preload, Grid } from "@react-three/drei";
 import { Loader } from "@react-three/drei";
 import { useDispatch } from "react-redux";
-// import Earth from "./Earth";
 import dynamic from "next/dynamic";
+
+const CuriousSpaceship = dynamic(() => import("./CuriousSpaceship"), {
+	ssr: false,
+});
 
 const Earth = dynamic(() => import("./Earth"), {
 	ssr: false,
 });
+
 interface AlienInvasionProps {}
 const AlienInvasion = ({}: AlienInvasionProps) => {
 	const dispatch = useDispatch();
+	const spaceShip = useRef();
 	const handleCanvasLoaded = () => {
 		dispatch({
 			type: "SET_CANVAS_RENDERED",
@@ -47,9 +52,10 @@ const AlienInvasion = ({}: AlienInvasionProps) => {
 				className="alienInvasion-canvas"
 				id="alien-invasion-canvas"
 			>
-				<PerspectiveCamera makeDefault position={[0, 0, 2.5]} />
-				<directionalLight intensity={1} position={[-3, 1.4, 0]} />
+				<PerspectiveCamera makeDefault position={[0, 0, 250]} />
+				<directionalLight intensity={1} position={[-300, 140, 0]} />
 				<Earth />
+				<CuriousSpaceship ref={spaceShip} />
 				<Preload all />
 			</Canvas>
 			<Loader />
