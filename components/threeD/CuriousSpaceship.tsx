@@ -60,7 +60,7 @@ const positions: {
 		rotation: [0, 0, 0],
 		animation: {
 			static: (elapsed: number, ref: MutableRefObject<any>) => {
-				const scaleFactor = 0.01;
+				const scaleFactor = 0.005;
 				ref.current.rotation.y = Math.cos(Math.PI * elapsed) * scaleFactor;
 				ref.current.rotation.z = Math.cos(Math.PI * elapsed) * scaleFactor;
 				ref.current.rotation.x = Math.cos(Math.PI * elapsed) * scaleFactor;
@@ -83,8 +83,8 @@ const CuriousSpaceship = forwardRef((props: CuriousSpaceshipProps) => {
 		console.log("threeState: ", threeState);
 		const elapsed = clock.getElapsedTime();
 		// positions?.curiouslyHover?.animation?.static(elapsed, shipRef);
-		positions?.upClose?.animation?.static(elapsed, shipRef);
-		// positions?.pauseBeforeTakeoff?.animation?.static(elapsed, shipRef);
+		// positions?.upClose?.animation?.static(elapsed, shipRef);
+		positions?.pauseBeforeTakeoff?.animation?.static(elapsed, shipRef);
 	});
 
 	return (
