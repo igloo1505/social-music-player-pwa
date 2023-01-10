@@ -57,7 +57,7 @@ interface audioProps {
 }
 
 export interface hoverPosition {
-	position: { x: number; y: number; z: number };
+	position?: { x: number; y: number; z: number };
 	rotation: { x: number; y: number; z: number };
 	animation: {
 		static?: (elapsed: number, ref: MutableRefObject<any>) => void;
@@ -101,7 +101,9 @@ export const positions: {
 			preExitPeriod: 2000,
 		},
 		stayPeriod: 7000,
+		// Maybe set this back to positionEnum.upClose
 		nextInSequence: positionEnum.upClose,
+		// nextInSequence: positionEnum.pauseBeforeTakeoff,
 	},
 	upClose: {
 		position: { x: 0, y: 0, z: 248.75 },
@@ -112,8 +114,8 @@ export const positions: {
 				ref.current.rotation.y = Math.cos(Math.PI * elapsed) * scaleFactor;
 				ref.current.rotation.z = Math.cos(Math.PI * elapsed) * scaleFactor;
 				ref.current.rotation.x = Math.cos(Math.PI * elapsed) * scaleFactor;
-				ref.current.position.y = Math.cos(Math.PI * 0.2 * elapsed) * 0.03;
-				ref.current.position.x = Math.cos(Math.PI * 0.2 * elapsed) * 0.01;
+				ref.current.position.y = Math.cos(Math.PI * 0.5 * elapsed) * 0.03;
+				ref.current.position.x = Math.cos(Math.PI * 0.5 * elapsed) * 0.01;
 			},
 		},
 		audioProps: {
@@ -128,7 +130,7 @@ export const positions: {
 		nextInSequence: positionEnum.pauseBeforeTakeoff,
 	},
 	pauseBeforeTakeoff: {
-		position: { x: 0, y: 0, z: 248.75 },
+		// position: { x: 0, y: 0, z: 248.75 },
 		rotation: { x: 0, y: 0, z: 0 },
 		animation: {
 			static: (elapsed: number, ref: MutableRefObject<any>) => {
@@ -144,7 +146,7 @@ export const positions: {
 		},
 		entranceEase: "power3.out",
 		entranceDuration: 1000,
-		stayPeriod: 10000,
+		stayPeriod: 2000,
 		nextInSequence: positionEnum.goProbePeople,
 	},
 	goProbePeople: {
@@ -193,18 +195,20 @@ const CuriousSpaceship = connector(
 			if (currentState !== positionEnum.stay) {
 				const currentPosition = positions[currentState];
 				console.log("currentPosition: ", currentState, currentPosition);
-				/// @ts-ignore
-				gsap.to(shipRef.current.position, {
-					x: currentPosition.position.x,
-					y: currentPosition.position.y,
-					z: currentPosition.position.z,
-					delay: currentPosition?.positionDelay
-						? currentPosition?.positionDelay / 1000
-						: 0,
+				if (currentPosition.position) {
 					/// @ts-ignore
-					duration: positions?.[currentState]?.entranceDuration / 1000 || 1,
-					ease: currentPosition.entranceEase || "power3.out",
-				});
+					gsap.to(shipRef.current.position, {
+						x: currentPosition.position.x,
+						y: currentPosition.position.y,
+						z: currentPosition.position.z,
+						delay: currentPosition?.positionDelay
+							? currentPosition?.positionDelay / 1000
+							: 0,
+						/// @ts-ignore
+						duration: positions?.[currentState]?.entranceDuration / 1000 || 1,
+						ease: currentPosition.entranceEase || "power3.out",
+					});
+				}
 				/// @ts-ignore
 				gsap.to(shipRef.current.rotation, {
 					x: currentPosition.rotation.x,
