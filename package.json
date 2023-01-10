@@ -16,6 +16,7 @@
 		"@react-three/postprocessing": "^2.7.0",
 		"@react-three/rapier": "^0.11.3",
 		"@reduxjs/toolkit": "^1.9.0",
+		"@splinetool/r3f-spline": "^1.0.2",
 		"@splinetool/react-spline": "^2.2.5",
 		"@splinetool/runtime": "^0.9.174",
 		"@types/node": "18.11.9",
@@ -29,9 +30,6 @@
 		"eslint": "8.28.0",
 		"eslint-config-next": "13.0.4",
 		"gsap": "^3.11.3",
-		"joi": "^17.7.0",
-		"joi-to-typescript": "^4.0.7",
-		"maath": "^0.5.1",
 		"mongodb": "^4.12.1",
 		"mongoose": "^6.7.3",
 		"next": "13.0.4",
@@ -42,10 +40,8 @@
 		"react-icons": "^4.6.0",
 		"react-redux": "^8.0.5",
 		"sass": "^1.56.1",
-		"teenyicons": "^0.4.1",
 		"three": "^0.148.0",
-		"typescript": "4.9.3",
-		"usehooks-ts": "^2.9.1"
+		"typescript": "4.9.3"
 	},
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",

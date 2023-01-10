@@ -1,13 +1,9 @@
-// // import { PayloadAction } from "@reduxjs/toolkit";
-// import { RootState } from "./store";
-// import { AnyAction } from "redux";
 import * as Types from "./ReduxTypes";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createReducer } from "@reduxjs/toolkit";
 import initState from "./initialState";
 import ToastConfig from "../types/ToastConfig";
 const initialState = initState.UI;
-
 const UIReducer = createReducer(initialState, (builder) => {
 	builder.addCase("SHOW_TOAST", (state, action: Types.SHOW_TOAST) => {
 		return {
@@ -15,15 +11,7 @@ const UIReducer = createReducer(initialState, (builder) => {
 			toast: action.payload,
 		};
 	});
-	builder.addCase(
-		"SET_CANVAS_RENDERED",
-		(state, action: Types.SET_CANVAS_RENDERED) => {
-			return {
-				...state,
-				canvasRendered: action.payload,
-			};
-		}
-	);
+
 	builder.addCase("SET_VIEWPORT", (state, action: Types.SET_VIEWPORT) => {
 		return {
 			...state,
@@ -61,13 +49,6 @@ const UIReducer = createReducer(initialState, (builder) => {
 			};
 		}
 	);
-
-	builder.addCase("SET-AUDIO-MUTED", (state, action: Types.SET_AUDIO_MUTED) => {
-		return {
-			...state,
-			audioMuted: action.payload,
-		};
-	});
 });
 
 export default UIReducer;

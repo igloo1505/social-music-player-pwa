@@ -6,7 +6,6 @@ import { RootState } from "../../state/store";
 import initialState from "../../state/initialState";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { boolean } from "joi";
 
 const connector = connect((state: RootState, props: any) => ({
 	drawer: state.UI.drawer,

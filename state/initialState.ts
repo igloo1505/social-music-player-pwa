@@ -1,3 +1,4 @@
+import { audioEnum } from "../components/threeD/CuriousSpaceship";
 import ToastConfig from "../types/ToastConfig";
 
 const initialState = {
@@ -22,9 +23,12 @@ const initialState = {
 				height: -1,
 			},
 		},
-		canvasRendered: false,
 		landingGridCardExpanded: false as boolean | string | undefined,
+	},
+	three: {
+		canvasRendered: false,
 		audioMuted: true,
+		currentAudioPath: audioEnum.ufoSoundEffect as audioEnum,
 	},
 };
 

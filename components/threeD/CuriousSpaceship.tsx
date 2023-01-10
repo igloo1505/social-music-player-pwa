@@ -1,46 +1,62 @@
-import { Float, PositionalAudio, useGLTF, useTexture } from "@react-three/drei";
+import { useGLTF, PositionalAudio as PositionalSound } from "@react-three/drei";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import React, {
-	forwardRef,
 	useState,
 	useEffect,
 	MutableRefObject,
 	useRef,
 	Ref,
+	Fragment,
 } from "react";
-import { AudioListener, AudioLoader, Vector3 } from "three";
+import { AudioManager } from "./StandardAudioApproach";
+import { Vector3 } from "three";
 import gsap from "gsap";
 import { RootState } from "../../state/store";
 const modelPath = "/threeJs/UFO.gltf";
 import { connect } from "react-redux";
+import { audioShouldPlay, initAudio } from "./StandardAudioApproach";
+
 const connector = connect((state: RootState, props) => ({
-	muted: state.UI.audioMuted,
+	muted: state.three.audioMuted,
+	hasRendered: state.three.canvasRendered,
 }));
 
 interface CuriousSpaceshipProps {
 	muted: boolean;
+	hasRendered: boolean;
 }
 
-enum positionEnum {
+export enum positionEnum {
 	curiouslyHover = "curiouslyHover",
 	upClose = "upClose",
 	pauseBeforeTakeoff = "pauseBeforeTakeoff",
 	goProbePeople = "goProbePeople",
 	hideDarkside = "hideDarkside",
+	stay = "stay",
 }
 
-enum audioEnum {
-	decompress = "/threeJs/audio/ChambeDecompressing.mp3",
-	laserBlast = "/threeJs/audio/LaserBlasts.mp3",
-	powerUp = "/threeJs/audio/Power-Up.mp3",
-	takeoff = "/threeJs/audio/Spaceship_Takeoff.mp3",
-	cruising = "/threeJs/audio/spaceship-cruising.mp3",
-	landing = "/threeJs/audio/ufo-landing.mp3",
-	ufoSoundEffect = "/threeJs/audio/ufo-sound-effect.mp3",
-	pulse = "/threeJs/audio/ufo_pulse.mp3",
+export enum audioEnum {
+	decompress = "threeJs/audio/ChamberDecompressing.mp3",
+	laserBlast = "threeJs/audio/LaserBlasts.mp3",
+	powerUp = "threeJs/audio/Power-Up.mp3",
+	takeoff = "threeJs/audio/Spaceship_Takeoff.mp3",
+	cruising = "threeJs/audio/spaceship-cruising.mp3",
+	landing = "threeJs/audio/ufo-landing.mp3",
+	ufoSoundEffect = "threeJs/audio/ufo-sound-effect.mp3",
+	pulse = "threeJs/audio/ufo_pulse.mp3",
 }
 
-interface hoverPosition {
+interface audioProps {
+	mainAudioPath: audioEnum;
+	entranceAudioPath?: audioEnum;
+	exitAudioPath?: audioEnum;
+	preExitAudioPath?: audioEnum;
+	exitAudioPeriod?: number;
+	entranceAudioPeriod?: number;
+	preExitPeriod?: number;
+}
+
+export interface hoverPosition {
 	position: { x: number; y: number; z: number };
 	rotation: { x: number; y: number; z: number };
 	animation: {
@@ -51,10 +67,13 @@ interface hoverPosition {
 	entranceEase?: string;
 	entranceDuration?: number;
 	positionDelay?: number;
-	audioPath?: audioEnum;
+	audioProps?: audioProps;
+	rotationDuration?: number;
+	stayPeriod: number;
+	nextInSequence: positionEnum;
 }
 
-const positions: {
+export const positions: {
 	curiouslyHover: hoverPosition;
 	upClose: hoverPosition;
 	pauseBeforeTakeoff: hoverPosition;
@@ -74,6 +93,15 @@ const positions: {
 				ref.current.position.y = Math.cos(Math.PI * 0.2 * elapsed) * 0.1;
 			},
 		},
+		audioProps: {
+			mainAudioPath: audioEnum.ufoSoundEffect,
+			entranceAudioPath: audioEnum.laserBlast,
+			entranceAudioPeriod: 1000,
+			preExitAudioPath: audioEnum.powerUp,
+			preExitPeriod: 2000,
+		},
+		stayPeriod: 7000,
+		nextInSequence: positionEnum.upClose,
 	},
 	upClose: {
 		position: { x: 0, y: 0, z: 248.75 },
@@ -88,6 +116,16 @@ const positions: {
 				ref.current.position.x = Math.cos(Math.PI * 0.2 * elapsed) * 0.01;
 			},
 		},
+		audioProps: {
+			mainAudioPath: audioEnum.ufoSoundEffect,
+			preExitAudioPath: audioEnum.powerUp,
+			preExitPeriod: 2000,
+			exitAudioPath: audioEnum.pulse,
+			exitAudioPeriod: 3000,
+		},
+		entranceDuration: 350,
+		stayPeriod: 5000,
+		nextInSequence: positionEnum.pauseBeforeTakeoff,
 	},
 	pauseBeforeTakeoff: {
 		position: { x: 0, y: 0, z: 248.75 },
@@ -100,141 +138,149 @@ const positions: {
 				ref.current.rotation.x = Math.cos(Math.PI * elapsed) * scaleFactor;
 			},
 		},
+		// audioPath: audioEnum.powerUp,
+		audioProps: {
+			mainAudioPath: audioEnum.ufoSoundEffect,
+		},
 		entranceEase: "power3.out",
-		entranceDuration: 1,
+		entranceDuration: 1000,
+		stayPeriod: 10000,
+		nextInSequence: positionEnum.goProbePeople,
 	},
 	goProbePeople: {
 		position: { x: -102, y: 0, z: 0 },
-		rotation: { x: Math.PI * -0.5, y: Math.PI * 0.2, z: Math.PI * -0.5 },
+		rotation: { x: Math.PI * -0.35, y: Math.PI * 0.3, z: Math.PI * -0.35 },
 		animation: {},
 		entranceEase: "power3.out",
-		entranceDuration: 3,
-		positionDelay: 0.5,
+		entranceDuration: 3000,
+		positionDelay: 1000,
+		// audioPath: audioEnum.laserBlast,
+		stayPeriod: 8000,
+		audioProps: {
+			mainAudioPath: audioEnum.laserBlast,
+			preExitAudioPath: audioEnum.powerUp,
+		},
+		nextInSequence: positionEnum.stay,
 	},
 	hideDarkside: {
 		position: { x: 102, y: 0, z: 0 },
 		rotation: { x: 0, y: 0, z: 0 },
 		animation: {},
 		entranceEase: "power3.out",
-		entranceDuration: 3,
-		positionDelay: 0.5,
+		stayPeriod: 3000,
+		nextInSequence: positionEnum.curiouslyHover,
 	},
 };
 
 const initialShipState: positionEnum = positionEnum.hideDarkside;
 const initialWaitPeriod: number = 5000;
+// TODO: clean up unnecessary muted import once audioComponent is functioning
+const CuriousSpaceship = connector(
+	({ muted, hasRendered }: CuriousSpaceshipProps) => {
+		const model = useGLTF(modelPath);
+		const three = useThree();
+		const [currentState, setCurrentState] = useState<positionEnum>(
+			positionEnum.hideDarkside
+		);
+		const shipRef = useRef();
 
-const CuriousSpaceship = connector(({ muted }: CuriousSpaceshipProps) => {
-	const audioRef = useRef();
-	const audioContext = new AudioContext();
-
-	const model = useGLTF(modelPath);
-	const three = useThree();
-	const [
-		decompress,
-		laserBlast,
-		powerUp,
-		takeoff,
-		cruising,
-		landing,
-		ufoSoundEffect,
-		pulse,
-	] = useLoader(AudioLoader, Object.values(audioEnum));
-	const [currentState, setCurrentState] = useState<positionEnum>(
-		positionEnum.hideDarkside
-	);
-	const [audioListener, setAudioListener] = useState<AudioListener>(
-		new AudioListener()
-	);
-	const shipRef = useRef();
-	console.log("model: ", model.scene.children[0].children[0].children);
-	model.scene.children[0].children[0].children.map((m) => {
-		if (m.name === "Ufo_Ufo_Engine_2001") {
-			m.visible = false;
-		}
-	});
-	useEffect(() => {
-		console.log("Playing sound...");
-		audioRef?.current?.setBuffer(ufoSoundEffect);
-		audioRef?.current?.setRefDistance(1);
-		audioRef?.current?.setLoop(true);
-		audioRef?.current?.play();
-		/// @ts-ignore
-		gsap.to(shipRef.current.position, {
-			x: positions[currentState].position.x,
-			y: positions[currentState].position.y,
-			z: positions[currentState].position.z,
-			delay: positions[currentState].positionDelay || 0,
-			/// @ts-ignore
-			duration: positions?.[currentState]?.entranceDuration * 0.2 || 1,
-			ease: positions[currentState].entranceEase || "power3.out",
-		});
-		/// @ts-ignore
-		gsap.to(shipRef.current.rotation, {
-			x: positions[currentState].rotation.x,
-			y: positions[currentState].rotation.y,
-			z: positions[currentState].rotation.z,
-			duration: positions[currentState].entranceDuration || 1,
-			ease: positions[currentState].entranceEase || "power3.out",
-		});
-	}, [currentState]);
-	useEffect(() => {
-		// const audioListener = new AudioListener();
-		if (typeof window === "undefined") return;
-		let context = three.gl.getContext();
-		three.camera.add(audioListener);
-		audioContext.createBufferSource(audioRef.current);
-		setTimeout(() => {
-			setCurrentState(positionEnum.curiouslyHover);
-		}, initialWaitPeriod);
-		setTimeout(() => {
-			setCurrentState(positionEnum.pauseBeforeTakeoff);
-		}, initialWaitPeriod + 5000);
-		setTimeout(() => {
-			setCurrentState(positionEnum.goProbePeople);
-		}, initialWaitPeriod + 9000);
-	}, []);
-
-	useFrame(({ clock, ...threeState }) => {
-		// console.log("clock: ", clock);
-		// console.log("threeState: ", threeState);
-		const elapsed = clock.getElapsedTime();
-		if (positions?.[currentState].animation?.static) {
-			/// @ts-ignore
-			positions[currentState].animation.static(elapsed, shipRef);
-		}
-	});
-
-	return (
-		<group
-			position={
-				Object.values(
-					positions[initialShipState].position
-				) as unknown as Vector3
+		model.scene.children[0].children[0].children.map((m) => {
+			if (m.name === "Ufo_Ufo_Engine_2001") {
+				m.visible = false;
 			}
-			scale={0.2}
-			rotation={[Math.PI * 0.1, -Math.PI * 0.1, Math.PI * 0]}
-			ref={shipRef as Ref<any>}
-		>
-			<PositionalAudio
-				ref={audioRef}
-				url={positions[currentState].audioPath || audioEnum.ufoSoundEffect}
-				distance={10000}
-				position={
-					Object.values(
-						positions[initialShipState].position
-					) as unknown as Vector3
+		});
+		useEffect(() => {
+			if (currentState !== positionEnum.stay) {
+				const currentPosition = positions[currentState];
+				console.log("currentPosition: ", currentState, currentPosition);
+				/// @ts-ignore
+				gsap.to(shipRef.current.position, {
+					x: currentPosition.position.x,
+					y: currentPosition.position.y,
+					z: currentPosition.position.z,
+					delay: currentPosition?.positionDelay
+						? currentPosition?.positionDelay / 1000
+						: 0,
+					/// @ts-ignore
+					duration: positions?.[currentState]?.entranceDuration / 1000 || 1,
+					ease: currentPosition.entranceEase || "power3.out",
+				});
+				/// @ts-ignore
+				gsap.to(shipRef.current.rotation, {
+					x: currentPosition.rotation.x,
+					y: currentPosition.rotation.y,
+					z: currentPosition.rotation.z,
+					duration: currentPosition.rotationDuration
+						? currentPosition.rotationDuration / 1000
+						: 1,
+					ease: currentPosition.entranceEase || "power3.out",
+				});
+				let audioEm = three.scene.getObjectByName("positional-audio");
+				if (audioEm) {
+					/// @ts-ignore
+					gsap.to(audioEm.position, {
+						x: currentPosition.rotation.x,
+						y: currentPosition.rotation.y,
+						z: currentPosition.rotation.z,
+						duration: currentPosition.entranceDuration
+							? currentPosition.entranceDuration / 1000
+							: 1,
+						ease: currentPosition.entranceEase || "power3.out",
+					});
 				}
-				autoplay={false}
-				loop
-				args={[audioListener]}
-			/>
-			<primitive object={model.scene} />
-		</group>
-	);
-});
+			}
+		}, [currentState]);
+		// NOTE: Handle animation timing here:
+		useEffect(() => {
+			if (typeof window === "undefined") return;
+			if (currentState === positionEnum.stay) return;
+			const currentPosition = positions[currentState];
+			console.log("Setting state with: ", currentPosition);
+			console.log("next in sequence: ", currentPosition.nextInSequence);
+			console.log("stay period: ", currentPosition.stayPeriod);
+			let _delay = currentPosition.stayPeriod;
+			currentPosition.entranceDuration &&
+				(_delay += currentPosition.entranceDuration);
+			currentPosition.positionDelay &&
+				(_delay += currentPosition.positionDelay);
+			setTimeout(() => {
+				setCurrentState(currentPosition.nextInSequence);
+			}, _delay);
+		}, [currentState]);
+
+		useFrame(({ clock, ...threeState }) => {
+			// console.log("clock: ", clock);
+			// console.log("threeState: ", threeState);
+			if (currentState === positionEnum.stay) return;
+			console.log("Animating currentState ", currentState);
+			const elapsed = clock.getElapsedTime();
+			if (positions?.[currentState].animation?.static) {
+				/// @ts-ignore
+				positions[currentState].animation.static(elapsed, shipRef);
+			}
+		});
+
+		return (
+			<Fragment>
+				<AudioManager positions={positions} currentState={currentState} />
+				<group
+					position={
+						Object.values(
+							positions[initialShipState].position
+						) as unknown as Vector3
+					}
+					scale={0.2}
+					rotation={[Math.PI * 0.1, -Math.PI * 0.1, Math.PI * 0]}
+					ref={shipRef as Ref<any>}
+					name="curious-spaceShip"
+				>
+					<primitive object={model.scene} />
+				</group>
+			</Fragment>
+		);
+	}
+);
 
 export default CuriousSpaceship;
 
 useGLTF.preload(modelPath);
-// useLoader.preload(TextureLoader, textures);

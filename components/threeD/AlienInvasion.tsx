@@ -1,10 +1,16 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { PerspectiveCamera, Preload, Grid } from "@react-three/drei";
-import { Loader } from "@react-three/drei";
 import { useDispatch } from "react-redux";
 import dynamic from "next/dynamic";
-import { AudioListener } from "three";
+
+const CuriousSpaceship = dynamic(() => import("./CuriousSpaceship"), {
+	ssr: false,
+});
+
+const Earth = dynamic(() => import("./Earth"), {
+	ssr: false,
+});
 
 const maxScrollCameraPosition: { x: number; y: number; z: number } = {
 	x: 0,
@@ -22,18 +28,9 @@ const positionDelta: { x: number; y: number; z: number } = {
 	z: maxScrollCameraPosition.z - initialCameraPosition.z,
 };
 
-const CuriousSpaceship = dynamic(() => import("./CuriousSpaceship"), {
-	ssr: false,
-});
-
-const Earth = dynamic(() => import("./Earth"), {
-	ssr: false,
-});
-
 interface AlienInvasionProps {}
 const AlienInvasion = ({}: AlienInvasionProps) => {
 	const dispatch = useDispatch();
-	const spaceShip = useRef();
 	const camera = useRef();
 	const handleAspectRatio = () => {
 		if (typeof window === "undefined") return;
@@ -48,8 +45,8 @@ const AlienInvasion = ({}: AlienInvasionProps) => {
 		}
 		container.style.height = newHeight;
 		container.style.width = newWidth;
-		console.log("container.style.height: ", container.style.height);
-		console.log("${containerRect.width}px: ", `${containerRect.width}px`);
+		// console.log("container.style.height: ", container.style.height);
+		// console.log("${containerRect.width}px: ", `${containerRect.width}px`);
 	};
 	const handleCanvasLoaded = () => {
 		dispatch({
@@ -63,13 +60,11 @@ const AlienInvasion = ({}: AlienInvasionProps) => {
 		const vh = window.innerHeight;
 		const sp = window.scrollY;
 		const vpRatio = 1 - (vh - sp) / vh;
-		console.log("vpRatio: ", vpRatio);
 		const newPosition: { x: number; y: number; z: number } = {
 			x: initialCameraPosition.x + positionDelta.x * vpRatio,
 			y: initialCameraPosition.y + positionDelta.y * vpRatio,
 			z: initialCameraPosition.z + positionDelta.z * vpRatio,
 		};
-		console.log("current", camera.current);
 		/// @ts-ignore
 		// camera.current?.position && (camera.current.position = newPosition);
 	};
@@ -98,10 +93,9 @@ const AlienInvasion = ({}: AlienInvasionProps) => {
 				/>
 				<directionalLight intensity={1} position={[-300, 140, 0]} />
 				<Earth />
-				<CuriousSpaceship ref={spaceShip} />
+				<CuriousSpaceship />
 				<Preload all />
 			</Canvas>
-			<Loader />
 		</Fragment>
 	);
 };

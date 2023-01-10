@@ -1,11 +1,10 @@
-import { createRoot } from "react-dom/client";
-import React, { useRef, useState, Fragment, Suspense } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { Sphere, useTexture, Float, useGLTF } from "@react-three/drei";
+import React, { useRef, useEffect } from "react";
+import { useFrame, useLoader, useThree } from "@react-three/fiber";
+import { Sphere, Float } from "@react-three/drei";
 import { TextureLoader, DoubleSide } from "three";
-import GetThreeJsInfo from "./GetThreeJsInfo";
+// import GetThreeJsInfo from "./GetThreeJsInfo";
 import IlluminatedCities from "./IlluminatedCities";
-import CuriousSpaceship from "./CuriousSpaceship";
+
 const EarthTexture = "/threeJs/Earth-texture.jpeg";
 const EarthNormal = "/threeJs/Earth_NormalNRM_6k.jpg";
 const EarthGloss = "/threeJs/Earth_Glossiness_6k.jpg";
@@ -21,7 +20,7 @@ const Earth = (props: any) => {
 		TextureLoader,
 		[EarthTexture, EarthNormal, EarthSpecular, Earth_Clouds, EarthGloss]
 	);
-	GetThreeJsInfo();
+
 	useFrame(({ clock }) => {
 		const cycle = (Math.PI * 2) / rotationPeriod;
 		const elapsedTime = clock.getElapsedTime();
@@ -31,6 +30,7 @@ const Earth = (props: any) => {
 		/// @ts-ignore
 		cloudsRef.current.rotation.y = rotate * 0.3;
 	});
+
 	return (
 		<group ref={earthRef} {...props} dispose={null}>
 			<Float

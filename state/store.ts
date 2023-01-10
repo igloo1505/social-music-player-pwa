@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import UIReducer from "./UIReducer";
+import three from "./threeReducer";
 import initialState from "./initialState";
 
 const store = configureStore({
 	reducer: {
 		UI: UIReducer,
+		three: three,
 	},
 	devTools: process.env.NODE_ENV !== "production" || true,
 	preloadedState: initialState,

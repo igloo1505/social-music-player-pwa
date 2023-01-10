@@ -20,6 +20,7 @@ enum listeners {
 const SplineSocialButtons = ({}: SplineSocialButtonsProps) => {
 	const spline = useRef();
 	const onLoad = (splineApp: any) => {
+		console.log("splineApp: ", splineApp);
 		spline.current = splineApp;
 		if (typeof window === "undefined") return;
 		let canvas = document.getElementById("social-canvas");
@@ -56,6 +57,7 @@ const SplineSocialButtons = ({}: SplineSocialButtonsProps) => {
 		}
 	};
 	const handleMouseEnter = (title: "linkedIn" | "github" | "share") => {
+		console.log("splineApp", spline);
 		if (!spline.current) return;
 		/// @ts-ignore
 		let listener = spline.current.findObjectByName(listeners[title]);

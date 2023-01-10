@@ -1,7 +1,13 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { toggleDrawer } from "../../state/actions";
 import { useAppDispatch } from "../../hooks/ReduxHooks";
 import { AiOutlineBars } from "react-icons/ai";
+import dynamic from "next/dynamic";
+import { aspectRatio } from "../settings/AudioSwitch";
+const AudioSwitch = dynamic(() => import("../settings/AudioSwitch"), {
+	ssr: false,
+});
+
 interface NavbarButtonsProps {
 	// links:
 }
@@ -25,6 +31,9 @@ const NavbarButtons = ({}: NavbarButtonsProps) => {
 			className="flex flex-row gap-2 mr-3 opacity-1 h-full w-fit px-5 justify-center items-center"
 			id="navbar-buttons-right"
 		>
+			<Suspense>
+				<AudioSwitch />
+			</Suspense>
 			{links.map((l, i) => {
 				const { text } = l;
 				return (
