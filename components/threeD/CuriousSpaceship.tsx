@@ -15,10 +15,9 @@ import { RootState } from "../../state/store";
 const modelPath = "/threeJs/UFO.gltf";
 import { connect } from "react-redux";
 import Position from "../../types/Position";
-import PositionArray, {
-	positionEnum,
-	audioEnum,
-} from "../../state/positionArray";
+import PositionArray, { positionEnum } from "../../state/positionArray";
+import { audioEnum } from "../../types/AudioHandler";
+import AlienInvasionManager from "../../types/AlienInvasionManager";
 
 const connector = connect((state: RootState, props) => ({
 	muted: state.three.audioMuted,
@@ -28,6 +27,7 @@ const connector = connect((state: RootState, props) => ({
 interface CuriousSpaceshipProps {
 	muted: boolean;
 	hasRendered: boolean;
+	manager: AlienInvasionManager;
 }
 
 // Currently in use:
@@ -39,7 +39,7 @@ const initialShipState: positionEnum = positionEnum.hideDarkside;
 // const initialWaitPeriod: number = 5000;
 // TODO: clean up unnecessary muted import once audioComponent is functioning
 const CuriousSpaceship = connector(
-	({ muted, hasRendered }: CuriousSpaceshipProps) => {
+	({ muted, hasRendered, manager }: CuriousSpaceshipProps) => {
 		const model = useGLTF(modelPath);
 		const positionArray = new PositionArray();
 		const [currentPosition, setCurrentPosition] = useState<Position>(
@@ -49,52 +49,28 @@ const CuriousSpaceship = connector(
 			audioEnum.ufoSoundEffect
 		);
 		const shipRef = useRef();
+		manager.setShipRef(shipRef);
 
 		model.scene.children[0].children[0].children.map((m) => {
 			if (m.name === "Ufo_Ufo_Engine_2001") {
 				m.visible = false;
 			}
 		});
-		useEffect(() => {
-			if (currentPosition.position) {
-				/// @ts-ignore
-				gsap.to(shipRef.current.position, {
-					x: currentPosition.position.x,
-					y: currentPosition.position.y,
-					z: currentPosition.position.z,
-					delay: currentPosition?.positionDelay
-						? currentPosition?.positionDelay / 1000
-						: 0,
-					/// @ts-ignore
-					duration: currentPosition?.entranceDuration / 1000 || 1,
-					ease: currentPosition.entranceEase || "power3.out",
-				});
-			}
-			if (currentPosition.rotation) {
-				/// @ts-ignore
-				gsap.to(shipRef.current.rotation, {
-					x: currentPosition.rotation.x,
-					y: currentPosition.rotation.y,
-					z: currentPosition.rotation.z,
-					duration: currentPosition.rotationDuration
-						? currentPosition.rotationDuration / 1000
-						: 1,
-					ease: currentPosition.entranceEase || "power3.out",
-				});
-			}
-		}, [currentPosition]);
+		useEffect(() => {}, [currentPosition]);
 		// NOTE: Handle animation timing here:
 		useEffect(() => {
 			if (typeof window === "undefined") return;
-			console.log("Setting state with: ", currentPosition);
-			console.log("next in sequence: ", currentPosition.nextInSequence);
-			console.log("stay period: ", currentPosition.stayPeriod);
-			const _delay = currentPosition.getTotalPeriod();
+			// console.log("Setting state with: ", currentPosition);
+			// console.log("next in sequence: ", currentPosition.nextInSequence);
+			// console.log("stay period: ", currentPosition.stayPeriod);
+			let next = currentPosition.getNextInSequence(positionArray.data);
+			if (!next) return;
+			const _delay = next.getTotalPeriod();
 			setTimeout(() => {
-				let next = currentPosition.getNextInSequence(positionArray.data);
 				next && setCurrentPosition(next);
 			}, _delay);
 		}, [currentPosition]);
+
 		useFrame(({ clock, ...threeState }) => {
 			// console.log("clock: ", clock);
 			// console.log("threeState: ", threeState);
@@ -112,6 +88,7 @@ const CuriousSpaceship = connector(
 					currentPosition={currentPosition}
 					currentAudioBuffer={currentAudioBuffer}
 					setBuffer={setCurrentAudioBuffer}
+					manager={manager}
 				/>
 				<group
 					position={

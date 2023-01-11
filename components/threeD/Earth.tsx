@@ -4,6 +4,7 @@ import { Sphere, Float } from "@react-three/drei";
 import { TextureLoader, DoubleSide } from "three";
 // import GetThreeJsInfo from "./GetThreeJsInfo";
 import IlluminatedCities from "./IlluminatedCities";
+import AlienInvasionManager from "../../types/AlienInvasionManager";
 
 const EarthTexture = "/threeJs/Earth-texture.jpeg";
 const EarthNormal = "/threeJs/Earth_NormalNRM_6k.jpg";

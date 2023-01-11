@@ -1,15 +1,6 @@
 import Position from "../types/Position";
 import { MutableRefObject } from "react";
-export enum audioEnum {
-	// decompress = "threeJs/audio/ChamberDecompressing.mp3",
-	laserBlast = "threeJs/audio/LaserBlasts.mp3",
-	powerUp = "threeJs/audio/Power-Up.mp3",
-	// takeoff = "threeJs/audio/Spaceship_Takeoff.mp3",
-	// cruising = "threeJs/audio/spaceship-cruising.mp3",
-	// landing = "threeJs/audio/ufo-landing.mp3",
-	ufoSoundEffect = "threeJs/audio/ufo-sound-effect.mp3",
-	pulse = "threeJs/audio/ufo_pulse.mp3",
-}
+import { audioEnum } from "../types/AudioHandler";
 export enum positionEnum {
 	curiouslyHover = "curiouslyHover",
 	upClose = "upClose",
@@ -19,6 +10,15 @@ export enum positionEnum {
 	stay = "stay",
 }
 const data: Position[] = [
+	new Position({
+		name: "hideDarkside",
+		position: { x: 102, y: 0, z: 0 },
+		rotation: { x: 0, y: 0, z: 0 },
+		animation: {},
+		entranceEase: "power3.out",
+		stayPeriod: 5000,
+		nextInSequence: positionEnum.curiouslyHover,
+	}),
 	new Position({
 		name: "curiouslyHover",
 		position: { x: 0, y: 0, z: 247 },
@@ -110,15 +110,6 @@ const data: Position[] = [
 			preExitAudioPath: audioEnum.powerUp,
 		},
 		nextInSequence: positionEnum.stay,
-	}),
-	new Position({
-		name: "hideDarkside",
-		position: { x: 102, y: 0, z: 0 },
-		rotation: { x: 0, y: 0, z: 0 },
-		animation: {},
-		entranceEase: "power3.out",
-		stayPeriod: 5000,
-		nextInSequence: positionEnum.curiouslyHover,
 	}),
 ];
 

@@ -1,5 +1,6 @@
 import { MutableRefObject } from "react";
-import { audioEnum, positionEnum } from "../state/positionArray";
+import { positionEnum } from "../state/positionArray";
+import { audioEnum } from "./AudioHandler";
 
 interface audioProps {
 	mainAudioPath: audioEnum;
@@ -50,6 +51,7 @@ class Position implements PositionType {
 	positionDelay?: number;
 	audioProps?: audioProps;
 	rotationDuration?: number;
+	ref?: MutableRefObject<any>;
 	constructor({
 		name,
 		stayPeriod,
@@ -75,6 +77,10 @@ class Position implements PositionType {
 		this.positionDelay = positionDelay;
 		this.audioProps = audioProps;
 		this.rotationDuration = rotationDuration;
+		// this.ref = ref;
+	}
+	setRef(ref: MutableRefObject<any>) {
+		this.ref = ref;
 	}
 	getTotalPeriod() {
 		let _delay = this.stayPeriod;
@@ -86,6 +92,8 @@ class Position implements PositionType {
 		const next = positionArray.filter((d) => d.name === this.nextInSequence);
 		return next.length > 0 ? next[0] : null;
 	}
+	animate(ref) {}
+	useFrame(ref: MutableRefObject<any>) {}
 }
 
 export default Position;
