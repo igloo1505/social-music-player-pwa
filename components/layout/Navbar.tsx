@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 const connector = connect((state: RootState, props: any) => ({
 	drawer: state.UI.drawer,
 	dims: state.UI.dimensions,
-	canvasRendered: state.UI.canvasRendered,
+	canvasRendered: state.three.canvasRendered,
 	gridCardOpen: state.UI.landingGridCardExpanded,
 	props: props,
 }));

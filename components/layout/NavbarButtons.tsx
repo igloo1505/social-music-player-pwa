@@ -3,13 +3,17 @@ import { toggleDrawer } from "../../state/actions";
 import { useAppDispatch } from "../../hooks/ReduxHooks";
 import { AiOutlineBars } from "react-icons/ai";
 import dynamic from "next/dynamic";
-import { aspectRatio } from "../settings/AudioSwitch";
+import { connect } from "react-redux";
+import { RootState } from "../../state/store";
+const connector = connect((state: RootState, props) => ({
+	audioInitialized: state.three.audioInitialized,
+}));
 const AudioSwitch = dynamic(() => import("../settings/AudioSwitch"), {
 	ssr: false,
 });
 
 interface NavbarButtonsProps {
-	// links:
+	audioInitialized: boolean;
 }
 
 interface NavLink {
@@ -18,7 +22,7 @@ interface NavLink {
 	onClick?: () => void;
 }
 
-const NavbarButtons = ({}: NavbarButtonsProps) => {
+const NavbarButtons = connector(({ audioInitialized }: NavbarButtonsProps) => {
 	const dispatch = useAppDispatch();
 	const links: NavLink[] = [
 		{
@@ -52,6 +56,6 @@ const NavbarButtons = ({}: NavbarButtonsProps) => {
 			})}
 		</div>
 	);
-};
+});
 
 export default NavbarButtons;

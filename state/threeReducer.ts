@@ -13,15 +13,12 @@ const UIReducer = createReducer(initialState, (builder) => {
 			audioMuted: action.payload,
 		};
 	});
-	builder.addCase(
-		"SET-CURRENT-AUDIO-PATH",
-		(state, action: Types.SET_CURRENT_AUDIO_PATH) => {
-			return {
-				...state,
-				currentAudioPath: action.payload,
-			};
+	builder.addCase("SET-AUDIO-INITIALIZED", (state, action: Types.SET_AUDIO_INITIALIZED) => {
+		return {
+			...state,
+			audioInitialized: true
 		}
-	);
+	})
 	builder.addCase(
 		"SET_CANVAS_RENDERED",
 		(state, action: Types.SET_CANVAS_RENDERED) => {

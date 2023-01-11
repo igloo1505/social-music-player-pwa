@@ -1,4 +1,3 @@
-import { audioEnum } from "../components/threeD/CuriousSpaceship";
 import ToastConfig from "../types/ToastConfig";
 
 const initialState = {
@@ -28,7 +27,7 @@ const initialState = {
 	three: {
 		canvasRendered: false,
 		audioMuted: true,
-		currentAudioPath: audioEnum.ufoSoundEffect as audioEnum,
+		audioInitialized: false,
 	},
 };
 

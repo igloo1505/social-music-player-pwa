@@ -13,6 +13,8 @@ export type SET_GRID_CARD_EXPANDED = {
 // Three.js stuff
 export type SET_AUDIO_MUTED = { type: "SET-AUDIO-MUTED"; payload: boolean };
 
+export type SET_AUDIO_INITIALIZED = { type: "SET-AUDIO-INITIALIZED"; };
+
 export type SET_CURRENT_AUDIO_PATH = {
 	type: "SET-CURRENT-AUDIO-PATH";
 	payload: audioEnum;
