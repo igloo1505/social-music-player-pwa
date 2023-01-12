@@ -64,6 +64,7 @@ class Position implements PositionType {
 	ref?: MutableRefObject<any>;
 	phase: phaseEnum = phaseEnum.main;
 	manager: AlienInvasionManager;
+	activated: boolean = false;
 	// timeoutIndex: number = 0;
 	// sequentialTimeouts: () => void;
 
@@ -89,7 +90,7 @@ class Position implements PositionType {
 			entrance: animation.entrance,
 			main: animation.main,
 			preExit: animation.preExit,
-			phase: phaseEnum.entrance,
+			name: this.name,
 		});
 		this.entranceEase = entranceEase;
 		this.audioProps = audioProps;
@@ -97,7 +98,6 @@ class Position implements PositionType {
 		this.periods = periods;
 		this.totalPeriod = periods.entrance + periods.main + periods.preExit;
 		this.phase = phaseEnum.entrance;
-		// this.sequentialTimeouts = this.getSequentialTimeouts();
 	}
 	setRef(ref: MutableRefObject<any>) {
 		this.ref = ref;
@@ -108,36 +108,11 @@ class Position implements PositionType {
 		return this.manager.positions.filter(
 			(d) => d.name === this.nextInSequence
 		)[0];
-		// return next.length > 0 ? next[0] : null;
 	}
-	getTimeoutPeriods() {
-		const totalPeriod = this.totalPeriod;
-		const periods = this.periods;
-		let preMain = 0;
-		this.periods.entrance && (preMain += this.periods.entrance);
-		// this.periods.positionDelay && (preMain += this.periods.positionDelay);
-		const timeoutPeriods = {
-			pre_main: preMain,
-			pre_preExit: totalPeriod - periods.preExit,
-			total: totalPeriod,
-		};
-		return timeoutPeriods;
-	}
-	// private getSequentialTimeouts() {
-	// 	const timeouts = [];
-	// 	if (this.periods.entrance !== 0) {
-	// 		timeouts.push(this.entranceTimeout);
-	// 	}
-	// 	if (this.periods.main !== 0) {
-	// 		timeouts.push(this.mainTimeout);
-	// 	}
-	// 	if (this.periods.preExit !== 0) {
-	// 		timeouts.push(this.preExitTimeout);
-	// 	}
-	// }
 	private setAnimationPhase(phase: phaseEnum) {
 		console.log(`Position: ${this.name}, Phase: ${phase}`);
 		this.phase = phase;
+		this.animation.phase = phase;
 		if (phase === phaseEnum.entrance) {
 			this.entranceTimeout();
 		}
@@ -149,7 +124,7 @@ class Position implements PositionType {
 		}
 	}
 	private preExitTimeout() {
-		console.log("init preExitTimeout");
+		console.log("init preExitTimeout", this.name);
 		if (this.nextInSequence !== positionEnum.stay) {
 			setTimeout(() => {
 				this.manager.nextPositionCallback(this.nextInSequence);
@@ -157,27 +132,27 @@ class Position implements PositionType {
 		}
 	}
 	private mainTimeout() {
-		console.log("init mainTimeout");
+		console.log("init mainTimeout", this.name);
 		setTimeout(() => {
 			this.setAnimationPhase(phaseEnum.preExit);
 		}, this.periods.main);
 	}
 	private entranceTimeout() {
-		console.log("init entranceTimeout");
+		console.log("init entranceTimeout", this.name);
 		setTimeout(() => {
 			this.setAnimationPhase(phaseEnum.main);
 		}, this.periods.entrance);
 	}
-
 	activate() {
 		console.log(`Activated ${this.name}`);
+		this.activated = true;
+		this.setAnimationPhase(phaseEnum.entrance);
 		this.animation.toPosition({
 			position: this.position,
 			rotation: this.rotation,
 			periods: this.periods,
 			entranceEase: this.entranceEase,
 		});
-		this.setAnimationPhase(phaseEnum.entrance);
 	}
 	// animate(ref) {}
 }

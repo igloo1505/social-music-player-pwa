@@ -3,12 +3,13 @@ import { phaseEnum } from "../../types/AudioHandler";
 import { periodsInterface, vectorObject } from "../../types/Position";
 import gsap from "gsap";
 import { MutableRefObject } from "react";
+import { positionEnum } from "../../state/positionArray";
 
 interface ShipAnimatedProps {
 	main: (elapased: number, ref: MutableRefObject<any>) => void;
 	entrance: (elapased: number, ref: MutableRefObject<any>) => void;
 	preExit: (elapased: number, ref: MutableRefObject<any>) => void;
-	phase: phaseEnum;
+	name: positionEnum;
 }
 
 class ShipAnimated {
@@ -17,25 +18,30 @@ class ShipAnimated {
 	entrance: (elapased: number, ref: MutableRefObject<any>) => void;
 	preExit: (elapased: number, ref: MutableRefObject<any>) => void;
 	phase: phaseEnum;
-	constructor({ main, entrance, preExit, phase }: ShipAnimatedProps) {
+	name: positionEnum;
+	constructor({ main, entrance, preExit, name }: ShipAnimatedProps) {
 		this.main = main;
 		this.preExit = preExit;
 		this.entrance = entrance;
-		this.phase = phase;
+		this.phase = phaseEnum.entrance;
+		this.name = name;
 	}
 	setRef(ref: MutableRefObject<any>) {
 		this.ref = ref;
 	}
-	useFrame(state: RootState) {
+	useFrame(state: RootState, currentPosition: positionEnum) {
 		const elapsed = state.clock.getElapsedTime();
+		if (currentPosition !== this.name) {
+			debugger;
+		}
 		if (!this.ref) return;
 		// console.log("this.phase: ", this.phase);
 		// console.log("elapsed: ", elapsed);
-		if (this.phase === phaseEnum.main && this?.main) {
-			this.main(elapsed, this.ref);
-		}
 		if (this.phase === phaseEnum.entrance && this?.entrance) {
 			this.entrance(elapsed, this.ref);
+		}
+		if (this.phase === phaseEnum.main && this?.main) {
+			this.main(elapsed, this.ref);
 		}
 		if (this.phase === phaseEnum.preExit && this?.preExit) {
 			this.preExit(elapsed, this.ref);
@@ -52,7 +58,6 @@ class ShipAnimated {
 		periods: periodsInterface;
 		entranceEase?: string;
 	}) {
-		console.log("toPosition");
 		if (position) {
 			/// @ts-ignore
 			gsap.to(this.ref.current?.position, {

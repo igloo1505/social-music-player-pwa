@@ -16,7 +16,7 @@ class AlienInvasionManager {
 			})
 	);
 	currentPosition: Position;
-	previousPositions: Position[] = [];
+	previousPosition: positionEnum;
 	shipRef?: MutableRefObject<any>;
 	constructor({
 		initialPosition,
@@ -38,16 +38,17 @@ class AlienInvasionManager {
 	}
 	nextPositionCallback(p: positionEnum) {
 		const newPosition = this.getPositionFromEnum(p);
+		console.log("newPosition: ", newPosition);
 		this.setNewPosition(newPosition);
 	}
 	getPositionFromEnum(query: positionEnum) {
 		return this.positions.filter((d) => d.name === query)[0];
 	}
 	private setNewPosition(position: Position) {
-		this.previousPositions.push(this.currentPosition);
+		console.log("setNewPosition: ", position);
 		this.currentPosition = position;
 		this.audio.updateCurrentPosition(position);
-		this.currentPosition.activate();
+		// this.currentPosition.activate();
 	}
 	private setRefs() {
 		this.shipRef &&
@@ -57,11 +58,14 @@ class AlienInvasionManager {
 		this.beginSequence();
 	}
 	private beginSequence() {
-		// debugger;
 		this.setNewPosition(this.currentPosition);
 	}
 	useFrame(state: RootState) {
-		this.currentPosition.animation.useFrame(state);
+		console.log(this.currentPosition.name);
+		if (!this.currentPosition.activated) {
+			this.currentPosition.activate();
+		}
+		this.currentPosition.animation.useFrame(state, this.currentPosition.name);
 	}
 }
 

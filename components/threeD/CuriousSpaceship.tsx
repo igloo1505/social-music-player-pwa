@@ -56,7 +56,6 @@ const CuriousSpaceship = connector(
 			}
 		});
 		useFrame((threeState: ThreeState) => {
-			if (manager.currentPosition.stay) return;
 			manager.useFrame(threeState);
 			// const elapsed = clock.getElapsedTime();
 			// if (currentPosition.animation?.static) {

@@ -68,10 +68,10 @@ const positions = [
 		entranceEase: "power3.out",
 		// audioPath: audioEnum.laserBlast,
 		periods: {
-			entrance: 3000,
+			entrance: 2000,
 			main: 2000,
 			preExit: 0,
-			positionDelay: 2000,
+			positionDelay: 1000,
 		},
 		audioProps: {
 			mainAudioPath: audioEnum.laserBlast,
@@ -142,7 +142,7 @@ const positions = [
 			exitAudioPath: audioEnum.pulse,
 		},
 		periods: {
-			entrance: 1000,
+			entrance: 750,
 			main: 5000,
 			preExit: 0,
 			positionDelay: 0,
