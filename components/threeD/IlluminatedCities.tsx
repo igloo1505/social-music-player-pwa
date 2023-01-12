@@ -13,7 +13,9 @@ interface IlluminatedCitiesProps {
 
 const IlluminatedCities = forwardRef(
 	(props: IlluminatedCitiesProps, ref: MutableRefObject<any> | any) => {
-		const citiesMap = useTexture("/threeJs/Earth_Illumination_6K.jpg");
+		const citiesMap = useTexture(
+			"/threeJs/Earth_compressed/Earth_Illumination_6K.jpg"
+		);
 		return (
 			<Sphere receiveShadow args={[101, 32, 32]} ref={ref}>
 				<meshPhysicalMaterial

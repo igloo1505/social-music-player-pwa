@@ -6,11 +6,17 @@ import { TextureLoader, DoubleSide } from "three";
 import IlluminatedCities from "./IlluminatedCities";
 import AlienInvasionManager from "../../types/AlienInvasionManager";
 
-const EarthTexture = "/threeJs/Earth-texture.jpeg";
-const EarthNormal = "/threeJs/Earth_NormalNRM_6k.jpg";
-const EarthGloss = "/threeJs/Earth_Glossiness_6k.jpg";
-const EarthSpecular = "/threeJs/Earth_specular.jpg";
-const Earth_Clouds = "/threeJs/Earth_Clouds_6K.jpg";
+// const EarthTexture = "/threeJs/Earth/Earth-texture.jpeg";
+// const EarthNormal = "/threeJs/Earth/Earth_NormalNRM_6k.jpg";
+// const EarthGloss = "/threeJs/Earth/Earth_Glossiness_6k.jpg";
+// const EarthSpecular = "/threeJs/Earth/Earth_specular.jpg";
+// const Earth_Clouds = "/threeJs/Earth/Earth_Clouds_6K.jpg";
+// compressed
+const EarthTexture = "/threeJs/Earth_compressed/Earth-texture.jpg";
+const EarthNormal = "/threeJs/Earth_compressed/Earth_NormalNRM_6k.jpg";
+const EarthGloss = "/threeJs/Earth_compressed/Earth_Glossiness_6k.jpg";
+const EarthSpecular = "/threeJs/Earth_compressed/Earth_specular.jpg";
+const Earth_Clouds = "/threeJs/Earth_compressed/Earth_Clouds_6K.jpg";
 const rotationPeriod = 180;
 
 const Earth = (props: any) => {
