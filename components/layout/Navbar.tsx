@@ -6,6 +6,7 @@ import { RootState } from "../../state/store";
 import initialState from "../../state/initialState";
 import clsx from "clsx";
 import { useRouter } from "next/router";
+// TODO: Create a new branch and go back to a regular approach to the navbar. Adding an opacity that works will be significantly more reliable even if the line is visible. Try adding padding and a border radius only to the bottom and then move on.
 
 const connector = connect((state: RootState, props: any) => ({
 	drawer: state.UI.drawer,

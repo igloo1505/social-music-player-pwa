@@ -1,13 +1,20 @@
 import { RootState } from "@react-three/fiber";
 import AudioHandler from "./AudioHandler";
 import Position from "./Position";
-import PositionArray from "../state/positionArray";
+import positionArray, { positionEnum } from "../state/positionArray";
 import { MutableRefObject } from "react";
 
 class AlienInvasionManager {
 	audio: AudioHandler;
 	three: RootState;
-	positionArray: PositionArray;
+	initialPositionKey: positionEnum = positionEnum.hideDarkside;
+	positions: Position[] = positionArray.map(
+		(d) =>
+			new Position({
+				...d,
+				manager: this,
+			})
+	);
 	currentPosition: Position;
 	previousPositions: Position[] = [];
 	shipRef?: MutableRefObject<any>;
@@ -18,38 +25,43 @@ class AlienInvasionManager {
 		initialPosition?: Position;
 		three: RootState;
 	}) {
-		this.positionArray = new PositionArray();
-		let _initialPosition = initialPosition || this.positionArray.data[0];
-		this.audio = new AudioHandler(_initialPosition);
-		this.currentPosition = _initialPosition;
 		this.three = three;
+		let _initialPosition =
+			this.getPositionFromEnum(positionEnum.hideDarkside) || this.positions[0];
+		this.audio = new AudioHandler(_initialPosition, three);
+		this.currentPosition = _initialPosition;
 	}
 	setShipRef(shipRef: MutableRefObject<any>) {
+		// debugger;
 		this.shipRef = shipRef;
 		this.setRefs();
+	}
+	nextPositionCallback(p: positionEnum) {
+		const newPosition = this.getPositionFromEnum(p);
+		this.setNewPosition(newPosition);
+	}
+	getPositionFromEnum(query: positionEnum) {
+		return this.positions.filter((d) => d.name === query)[0];
 	}
 	private setNewPosition(position: Position) {
 		this.previousPositions.push(this.currentPosition);
 		this.currentPosition = position;
 		this.audio.updateCurrentPosition(position);
-		this.handleTimeout();
+		this.currentPosition.activate();
 	}
 	private setRefs() {
 		this.shipRef &&
-			this.positionArray.data.forEach((p) => p.setRef(this.shipRef!));
+			this.positions.forEach((p) => {
+				p.setRef(this.shipRef!);
+			});
+		this.beginSequence();
 	}
-	private handleTimeout() {
-		// this.audio.
-		let totalPeriod = this.currentPosition.getTotalPeriod();
-		let nextPos = this.currentPosition.getNextInSequence(
-			this.positionArray.data
-		);
-		if (nextPos) {
-			//TODO: Add whatever that timeout handler api was called here in the AM.
-			setTimeout(() => {
-				this.setNewPosition(nextPos!);
-			}, totalPeriod);
-		}
+	private beginSequence() {
+		// debugger;
+		this.setNewPosition(this.currentPosition);
+	}
+	useFrame(state: RootState) {
+		this.currentPosition.animation.useFrame(state);
 	}
 }
 

@@ -1,5 +1,10 @@
 import { useGLTF, PositionalAudio as PositionalSound } from "@react-three/drei";
-import { useFrame, useLoader, useThree } from "@react-three/fiber";
+import {
+	useFrame,
+	useLoader,
+	useThree,
+	RootState as ThreeState,
+} from "@react-three/fiber";
 import React, {
 	useState,
 	useEffect,
@@ -10,6 +15,7 @@ import React, {
 } from "react";
 import { AudioManager } from "./StandardAudioApproach";
 import { Vector3 } from "three";
+
 import gsap from "gsap";
 import { RootState } from "../../state/store";
 const modelPath = "/threeJs/UFO.gltf";
@@ -41,13 +47,6 @@ const initialShipState: positionEnum = positionEnum.hideDarkside;
 const CuriousSpaceship = connector(
 	({ muted, hasRendered, manager }: CuriousSpaceshipProps) => {
 		const model = useGLTF(modelPath);
-		const positionArray = new PositionArray();
-		const [currentPosition, setCurrentPosition] = useState<Position>(
-			positionArray.getPositionFromEnumKey(positionEnum.hideDarkside)
-		);
-		const [currentAudioBuffer, setCurrentAudioBuffer] = useState<audioEnum>(
-			audioEnum.ufoSoundEffect
-		);
 		const shipRef = useRef();
 		manager.setShipRef(shipRef);
 
@@ -56,44 +55,23 @@ const CuriousSpaceship = connector(
 				m.visible = false;
 			}
 		});
-		useEffect(() => {}, [currentPosition]);
-		// NOTE: Handle animation timing here:
-		useEffect(() => {
-			if (typeof window === "undefined") return;
-			// console.log("Setting state with: ", currentPosition);
-			// console.log("next in sequence: ", currentPosition.nextInSequence);
-			// console.log("stay period: ", currentPosition.stayPeriod);
-			let next = currentPosition.getNextInSequence(positionArray.data);
-			if (!next) return;
-			const _delay = next.getTotalPeriod();
-			setTimeout(() => {
-				next && setCurrentPosition(next);
-			}, _delay);
-		}, [currentPosition]);
-
-		useFrame(({ clock, ...threeState }) => {
-			// console.log("clock: ", clock);
-			// console.log("threeState: ", threeState);
-			if (currentPosition.stay) return;
-			const elapsed = clock.getElapsedTime();
-			if (currentPosition.animation?.static) {
-				/// @ts-ignore
-				currentPosition.animation.static(elapsed, shipRef);
-			}
+		useFrame((threeState: ThreeState) => {
+			if (manager.currentPosition.stay) return;
+			manager.useFrame(threeState);
+			// const elapsed = clock.getElapsedTime();
+			// if (currentPosition.animation?.static) {
+			// 	/// @ts-ignore
+			// 	currentPosition.animation.static(elapsed, shipRef);
+			// }
 		});
 
 		return (
 			<Fragment>
-				<AudioManager
-					currentPosition={currentPosition}
-					currentAudioBuffer={currentAudioBuffer}
-					setBuffer={setCurrentAudioBuffer}
-					manager={manager}
-				/>
+				<AudioManager manager={manager} />
 				<group
 					position={
 						Object.values(
-							positionArray.getPositionFromEnumKey(initialShipState).position!
+							manager.getPositionFromEnum(initialShipState).position!
 						) as unknown as Vector3
 					}
 					scale={0.2}

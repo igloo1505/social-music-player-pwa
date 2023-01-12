@@ -67,7 +67,6 @@ const AudioSwitch = connector(
 		};
 
 		const onLoad = (splineApp: any) => {
-			console.log("splineApp: ", splineApp);
 			audioSwitch.current = splineApp;
 			if (typeof window === "undefined") return;
 			handleSize();

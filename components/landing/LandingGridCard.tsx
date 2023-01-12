@@ -6,6 +6,8 @@ import { RootState } from "../../state/store";
 import TopLevelPortal from "../layout/ToplevelPortal";
 import gsap from "gsap";
 
+// TODO: Handle pre-transform state. Text overlays card on some viewport widths.
+
 const connector = connect((state: RootState, props) => ({
 	currentlyExpanded: state.UI.landingGridCardExpanded,
 }));
@@ -120,6 +122,7 @@ const LandingGridCard = connector(
 					id={cardContainerId}
 					style={{
 						borderRadius: iconShouldTranslate ? "8px" : "0px",
+						overflowY: iconShouldTranslate ? "visible" : "hidden",
 					}}
 					onMouseEnter={() => setIsHovered(true)}
 					onMouseLeave={() => setIsHovered(false)}
