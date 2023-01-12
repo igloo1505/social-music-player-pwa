@@ -5,25 +5,15 @@ import {
 	useThree,
 	RootState as ThreeState,
 } from "@react-three/fiber";
-import React, {
-	useState,
-	useEffect,
-	MutableRefObject,
-	useRef,
-	Ref,
-	Fragment,
-} from "react";
+import React, { useRef, Ref, Fragment } from "react";
 import { AudioManager } from "./StandardAudioApproach";
 import { Vector3 } from "three";
-
-import gsap from "gsap";
 import { RootState } from "../../state/store";
-const modelPath = "/threeJs/UFO.gltf";
 import { connect } from "react-redux";
-import Position from "../../types/Position";
-import PositionArray, { positionEnum } from "../../state/positionArray";
-import { audioEnum } from "../../types/AudioHandler";
+import { positionEnum } from "../../state/positionArray";
 import AlienInvasionManager from "../../types/AlienInvasionManager";
+
+const modelPath = "/threeJs/UFO_compressed_3.gltf";
 
 const connector = connect((state: RootState, props) => ({
 	muted: state.three.audioMuted,
@@ -49,6 +39,7 @@ const CuriousSpaceship = connector(
 		const model = useGLTF(modelPath);
 		const shipRef = useRef();
 		manager.setShipRef(shipRef);
+		console.log("model: ", model);
 
 		model.scene.children[0].children[0].children.map((m) => {
 			if (m.name === "Ufo_Ufo_Engine_2001") {
