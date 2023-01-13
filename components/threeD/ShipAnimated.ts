@@ -35,10 +35,7 @@ class ShipAnimated {
 		if (currentPosition !== this.name) {
 			debugger;
 		}
-		console.log("this.shipRef: ", this.shipRef.current);
 		if (!this.shipRef.current) return;
-		// console.log("this.phase: ", this.phase);
-		// console.log("elapsed: ", elapsed);
 		if (this.phase === phaseEnum.entrance && this?.entrance) {
 			this.entrance(elapsed, this.shipRef);
 		}

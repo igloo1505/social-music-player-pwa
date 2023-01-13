@@ -1,27 +1,11 @@
 import { useGLTF, PositionalAudio as PositionalSound } from "@react-three/drei";
-import {
-	useFrame,
-	useLoader,
-	useThree,
-	RootState as ThreeState,
-} from "@react-three/fiber";
-import React, {
-	useRef,
-	Ref,
-	Fragment,
-	MutableRefObject,
-	forwardRef,
-	ForwardedRef,
-} from "react";
-import { AudioManager } from "./StandardAudioApproach";
-import { Group, Vector3 } from "three";
+import { useFrame, RootState as ThreeState } from "@react-three/fiber";
+import React, { Fragment, forwardRef, useEffect } from "react";
+import { Group } from "three";
 import { RootState } from "../../state/store";
 import { connect } from "react-redux";
-import { positionEnum } from "../../state/positionArray";
 import AlienInvasionManager from "../../types/AlienInvasionManager";
 import Spaceship from "./Spaceship_Standalone";
-
-const modelPath = "/threeJs/UFO_compressed_3.gltf";
 
 const connector = connect(
 	(state: RootState, props) => ({
@@ -45,21 +29,17 @@ interface CuriousSpaceshipProps {
 const CuriousSpaceship = connector(
 	forwardRef<Group, CuriousSpaceshipProps>(
 		({ muted, hasRendered, manager }, ref) => {
-			const model = useGLTF(modelPath);
-
-			model.scene.children[0].children[0].children.map((m) => {
-				if (m.name === "Ufo_Ufo_Engine_2001") {
-					m.visible = false;
-				}
-			});
 			useFrame((threeState: ThreeState) => {
 				if (!manager.isInitialized) return;
 				manager.useFrame(threeState);
 			});
+			useEffect(() => {
+			muted && manager.audio.mute()
+			!muted && manager.audio.unMute()
+			}, [muted])
 
 			return (
 				<Fragment>
-					<AudioManager manager={manager} />
 					<Spaceship
 						position={[102, 0, 0]}
 						scale={0.2}
@@ -74,5 +54,3 @@ const CuriousSpaceship = connector(
 );
 
 export default CuriousSpaceship;
-
-useGLTF.preload(modelPath);

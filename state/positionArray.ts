@@ -17,7 +17,7 @@ interface audioInterface {
 	loop?: boolean;
 }
 
-interface audioProps {
+export interface audioProps {
 	main: audioInterface[];
 	entrance: audioInterface[];
 	preExit: audioInterface[];

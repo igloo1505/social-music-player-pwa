@@ -3,41 +3,11 @@ import { audioEnum } from "./AudioHandler";
 import { Group, PositionalAudio, AudioListener, AudioLoader } from "three";
 import { extend } from "@react-three/fiber";
 
-interface PositionalAudioSourceProps {
-	path: audioEnum;
-	name: string;
-	loop?: boolean;
-}
-
-export const audioSources: PositionalAudioSourceProps[] = [
-	{
-		name: "laserBlast",
-		path: audioEnum.laserBlast,
-		loop: false,
-	},
-	{
-		name: "powerUp",
-		path: audioEnum.powerUp,
-		loop: false,
-	},
-	{
-		name: "ufoSoundEffect",
-		path: audioEnum.ufoSoundEffect,
-		loop: true,
-	},
-	{
-		name: "pulse",
-		path: audioEnum.pulse,
-		loop: false,
-	},
-];
-
 export class PositionalAudioSource extends PositionalAudio {
 	path: audioEnum;
 	name: string;
 	audioListener: AudioListener;
 	shipRef: MutableRefObject<Group>;
-	element: PositionalAudio = null!;
 	ref: MutableRefObject<PositionalAudioSource>;
 	constructor(
 		path: audioEnum,

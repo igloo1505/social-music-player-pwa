@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react";
-import { positionEnum } from "../state/positionArray";
+import { positionEnum, audioProps } from "../state/positionArray";
 import { audioEnum, phaseEnum } from "./AudioHandler";
 import gsap from "gsap";
 import { RootState } from "@react-three/fiber";
@@ -20,17 +20,6 @@ export interface vectorObject {
 	z: number;
 }
 
-interface audioProps {
-	mainAudioPath: audioEnum;
-	entranceAudioPath?: audioEnum;
-	exitAudioPath?: audioEnum;
-	preExitAudioPath?: audioEnum;
-	mainLoop?: boolean;
-	entranceLoop?: boolean;
-	exitLoop?: boolean;
-	preExitLoop?: boolean;
-}
-
 type PositionType = {
 	name: positionEnum;
 	nextInSequence: positionEnum;
@@ -44,7 +33,7 @@ type PositionType = {
 		preExit: (elapsed: number, ref: MutableRefObject<any>) => void;
 	};
 	entranceEase?: string;
-	audioProps?: audioProps;
+	audioProps: audioProps;
 	rotationDuration?: number;
 	manager: AlienInvasionManager;
 	// sequentialTimeouts: () => void;
@@ -60,7 +49,7 @@ class Position implements PositionType {
 	rotation?: vectorObject;
 	animation: ShipAnimated;
 	entranceEase?: string;
-	audioProps?: audioProps;
+	audioProps: audioProps;
 	rotationDuration?: number;
 	totalPeriod: number;
 	shipRef: MutableRefObject<any>;
@@ -126,27 +115,26 @@ class Position implements PositionType {
 		}
 	}
 	private preExitTimeout() {
-		console.log("init preExitTimeout", this.name);
 		if (this.nextInSequence !== positionEnum.stay) {
 			setTimeout(() => {
 				this.manager.nextPositionCallback(this.nextInSequence);
+				this.activated = false;
 			}, this.periods.preExit);
 		}
 	}
 	private mainTimeout() {
-		console.log("init mainTimeout", this.name);
 		setTimeout(() => {
+			this.manager.audio.updateCurrentPosition(this, phaseEnum.preExit);
 			this.setAnimationPhase(phaseEnum.preExit);
 		}, this.periods.main);
 	}
 	private entranceTimeout() {
-		console.log("init entranceTimeout", this.name);
 		setTimeout(() => {
+			this.manager.audio.updateCurrentPosition(this, phaseEnum.main);
 			this.setAnimationPhase(phaseEnum.main);
 		}, this.periods.entrance);
 	}
 	activate() {
-		console.log(`Activated ${this.name}`);
 		this.activated = true;
 		this.setAnimationPhase(phaseEnum.entrance);
 		this.animation.toPosition({

@@ -1,5 +1,5 @@
 import { RootState } from "@react-three/fiber";
-import AudioHandler from "./AudioHandler";
+import AudioHandler, { phaseEnum } from "./AudioHandler";
 import Position from "./Position";
 import positionArray, { positionEnum } from "../state/positionArray";
 import { MutableRefObject } from "react";
@@ -37,30 +37,28 @@ class AlienInvasionManager {
 		);
 		let _initialPosition =
 			this.getPositionFromEnum(positionEnum.hideDarkside) || this.positions[0];
-		this.audio = new AudioHandler(three, shipRef, audioRefs);
+		this.audio = new AudioHandler(three, shipRef, audioRefs, this);
 		this.currentPosition = _initialPosition;
 		this.beginSequence();
 	}
 	pushInitialized() {
 		this.initializedPositions.push(true);
-		if (this.initializedPositions.length === positionArray.length) {
+		// NOTE: + 1 to account for all positions plus audioManager
+		if (this.initializedPositions.length === positionArray.length + 1) {
 			// TODO: Make sure audio is initlialized here as well...
 			this.isInitialized = true;
 		}
 	}
 	nextPositionCallback(p: positionEnum) {
 		const newPosition = this.getPositionFromEnum(p);
-		console.log("newPosition: ", newPosition);
 		this.setNewPosition(newPosition);
 	}
 	getPositionFromEnum(query: positionEnum) {
 		return this.positions.filter((d) => d.name === query)[0];
 	}
 	private setNewPosition(position: Position) {
-		console.log("setNewPosition: ", position);
+		this.audio.updateCurrentPosition(position, phaseEnum.entrance);
 		this.currentPosition = position;
-		this.audio.updateCurrentPosition(position);
-		// this.currentPosition.activate();
 	}
 	private beginSequence() {
 		if (!this.isInitialized) {
@@ -71,10 +69,7 @@ class AlienInvasionManager {
 		this.setNewPosition(this.currentPosition);
 	}
 	useFrame(state: RootState) {
-		console.log(this.currentPosition.name);
-		if (!this.currentPosition.activated) {
-			this.currentPosition.activate();
-		}
+		!this.currentPosition.activated && this.currentPosition.activate();
 		this.currentPosition.animation.useFrame(state, this.currentPosition.name);
 	}
 }

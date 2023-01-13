@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from "react";
+import React, { ForwardedRef, forwardRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { Group, Mesh, MeshStandardMaterial } from "three";
@@ -93,7 +93,7 @@ type GLTFResult = GLTF & {
 };
 
 const Spaceship_standalone = forwardRef(
-	(props: JSX.IntrinsicElements["group"], ref) => {
+	(props: JSX.IntrinsicElements["group"], ref: ForwardedRef<Group>) => {
 		// const group = useRef<Group>(null!);
 		const { nodes, materials } = useGLTF(modelPath) as unknown as GLTFResult;
 		return (
