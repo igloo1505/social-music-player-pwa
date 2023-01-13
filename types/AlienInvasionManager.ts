@@ -3,38 +3,50 @@ import AudioHandler from "./AudioHandler";
 import Position from "./Position";
 import positionArray, { positionEnum } from "../state/positionArray";
 import { MutableRefObject } from "react";
+import { Group } from "three";
+import { PositionalAudioSource } from "./PositionalAudioSource";
 
 class AlienInvasionManager {
 	audio: AudioHandler;
 	three: RootState;
 	initialPositionKey: positionEnum = positionEnum.hideDarkside;
-	positions: Position[] = positionArray.map(
-		(d) =>
-			new Position({
-				...d,
-				manager: this,
-			})
-	);
+	positions: Position[];
 	currentPosition: Position;
-	previousPosition: positionEnum;
-	shipRef?: MutableRefObject<any>;
+	previousPosition: positionEnum | null = null;
+	shipRef: MutableRefObject<any>;
+	isInitialized: boolean = false;
+	initializedPositions: boolean[] = [];
 	constructor({
-		initialPosition,
 		three,
+		shipRef,
+		audioRefs,
 	}: {
-		initialPosition?: Position;
 		three: RootState;
+		shipRef: MutableRefObject<Group>;
+		audioRefs: MutableRefObject<PositionalAudioSource>[];
 	}) {
 		this.three = three;
+		this.shipRef = shipRef;
+		this.positions = positionArray.map(
+			(d) =>
+				new Position({
+					...d,
+					manager: this,
+					shipRef: shipRef,
+				})
+		);
 		let _initialPosition =
 			this.getPositionFromEnum(positionEnum.hideDarkside) || this.positions[0];
-		this.audio = new AudioHandler(_initialPosition, three);
+		this.audio = new AudioHandler(three, shipRef, audioRefs);
 		this.currentPosition = _initialPosition;
+		this.beginSequence();
 	}
-	setShipRef(shipRef: MutableRefObject<any>) {
-		// debugger;
-		this.shipRef = shipRef;
-		this.setRefs();
+	pushInitialized() {
+		this.initializedPositions.push(true);
+		if (this.initializedPositions.length === positionArray.length) {
+			// TODO: Make sure audio is initlialized here as well...
+			this.isInitialized = true;
+		}
 	}
 	nextPositionCallback(p: positionEnum) {
 		const newPosition = this.getPositionFromEnum(p);
@@ -50,14 +62,12 @@ class AlienInvasionManager {
 		this.audio.updateCurrentPosition(position);
 		// this.currentPosition.activate();
 	}
-	private setRefs() {
-		this.shipRef &&
-			this.positions.forEach((p) => {
-				p.setRef(this.shipRef!);
-			});
-		this.beginSequence();
-	}
 	private beginSequence() {
+		if (!this.isInitialized) {
+			return setTimeout(() => {
+				this.beginSequence();
+			}, 250);
+		}
 		this.setNewPosition(this.currentPosition);
 	}
 	useFrame(state: RootState) {

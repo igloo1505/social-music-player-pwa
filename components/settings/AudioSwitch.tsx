@@ -5,7 +5,6 @@ import { connect, useDispatch } from "react-redux";
 import { RootState } from "../../state/store";
 import clsx from "clsx";
 import gsap from "gsap";
-
 const connector = connect((state: RootState, props) => ({
 	audioMuted: state.three.audioMuted,
 	audioInitialized: state.three.audioInitialized,

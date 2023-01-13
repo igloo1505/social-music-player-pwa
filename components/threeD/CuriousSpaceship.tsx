@@ -5,9 +5,16 @@ import {
 	useThree,
 	RootState as ThreeState,
 } from "@react-three/fiber";
-import React, { useRef, Ref, Fragment } from "react";
+import React, {
+	useRef,
+	Ref,
+	Fragment,
+	MutableRefObject,
+	forwardRef,
+	ForwardedRef,
+} from "react";
 import { AudioManager } from "./StandardAudioApproach";
-import { Vector3 } from "three";
+import { Group, Vector3 } from "three";
 import { RootState } from "../../state/store";
 import { connect } from "react-redux";
 import { positionEnum } from "../../state/positionArray";
@@ -16,10 +23,17 @@ import Spaceship from "./Spaceship_Standalone";
 
 const modelPath = "/threeJs/UFO_compressed_3.gltf";
 
-const connector = connect((state: RootState, props) => ({
-	muted: state.three.audioMuted,
-	hasRendered: state.three.canvasRendered,
-}));
+const connector = connect(
+	(state: RootState, props) => ({
+		muted: state.three.audioMuted,
+		hasRendered: state.three.canvasRendered,
+	}),
+	null,
+	null,
+	{
+		forwardRef: true,
+	}
+);
 
 interface CuriousSpaceshipProps {
 	muted: boolean;
@@ -27,67 +41,38 @@ interface CuriousSpaceshipProps {
 	manager: AlienInvasionManager;
 }
 
-// Currently in use:
-// laserBlast
-// powerUp
-// ufoSoundEffect
-
-const initialShipState: positionEnum = positionEnum.hideDarkside;
-// const initialWaitPeriod: number = 5000;
 // TODO: clean up unnecessary muted import once audioComponent is functioning
 const CuriousSpaceship = connector(
-	({ muted, hasRendered, manager }: CuriousSpaceshipProps) => {
-		const model = useGLTF(modelPath);
-		const shipRef = useRef();
-		manager.setShipRef(shipRef);
-		console.log("model: ", model);
+	forwardRef<Group, CuriousSpaceshipProps>(
+		({ muted, hasRendered, manager }, ref) => {
+			const model = useGLTF(modelPath);
 
-		model.scene.children[0].children[0].children.map((m) => {
-			if (m.name === "Ufo_Ufo_Engine_2001") {
-				m.visible = false;
-			}
-		});
-		useFrame((threeState: ThreeState) => {
-			manager.useFrame(threeState);
-			// const elapsed = clock.getElapsedTime();
-			// if (currentPosition.animation?.static) {
-			// 	/// @ts-ignore
-			// 	currentPosition.animation.static(elapsed, shipRef);
-			// }
-		});
+			model.scene.children[0].children[0].children.map((m) => {
+				if (m.name === "Ufo_Ufo_Engine_2001") {
+					m.visible = false;
+				}
+			});
+			useFrame((threeState: ThreeState) => {
+				if (!manager.isInitialized) return;
+				manager.useFrame(threeState);
+			});
 
-		return (
-			<Fragment>
-				<AudioManager manager={manager} />
-				<Spaceship
-					position={[102, 0, 0]}
-					scale={0.2}
-					rotation={[Math.PI * 0.1, -Math.PI * 0.1, Math.PI * 0]}
-					ref={shipRef as Ref<any>}
-					name="curious-spaceShip"
-				/>
-				
-			</Fragment>
-		);
-	}
+			return (
+				<Fragment>
+					<AudioManager manager={manager} />
+					<Spaceship
+						position={[102, 0, 0]}
+						scale={0.2}
+						rotation={[Math.PI * 0.1, -Math.PI * 0.1, Math.PI * 0]}
+						ref={ref}
+						name="curious-spaceShip"
+					/>
+				</Fragment>
+			);
+		}
+	)
 );
 
 export default CuriousSpaceship;
 
 useGLTF.preload(modelPath);
-
-
-
-{/* <group
-position={
-	Object.values(
-		manager.getPositionFromEnum(initialShipState).position!
-	) as unknown as Vector3
-}
-scale={0.2}
-rotation={[Math.PI * 0.1, -Math.PI * 0.1, Math.PI * 0]}
-ref={shipRef as Ref<any>}
-name="curious-spaceShip"
->
-<primitive object={model.scene} />
-</group> */}

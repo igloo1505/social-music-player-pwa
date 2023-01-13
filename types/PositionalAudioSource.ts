@@ -35,31 +35,31 @@ export const audioSources: PositionalAudioSourceProps[] = [
 export class PositionalAudioSource extends PositionalAudio {
 	path: audioEnum;
 	name: string;
-	loop: boolean;
 	audioListener: AudioListener;
 	shipRef: MutableRefObject<Group>;
 	element: PositionalAudio = null!;
+	ref: MutableRefObject<PositionalAudioSource>;
 	constructor(
 		path: audioEnum,
 		name: string,
 		loop: boolean = false,
 		audioListener: AudioListener,
-		shipRef: MutableRefObject<Group>
+		shipRef: MutableRefObject<Group>,
+		ref: MutableRefObject<PositionalAudioSource>
 	) {
 		super(audioListener);
 		this.path = path;
-		this.name = name;
+		this.name = `audio-${name}`;
 		this.loop = loop;
 		this.shipRef = shipRef;
 		this.audioListener = audioListener;
+		this.ref = ref;
 		// const positionalAudio = new PositionalAudio(this.audioListener);
 		const audioLoader = new AudioLoader();
 		audioLoader.load(this.path, (buffer) => {
 			this.setBuffer(buffer);
 		});
-		this.name = this.name;
 		this.autoplay = false;
-		this.loop = this.loop;
 		this.setRefDistance(1);
 		this.setRolloffFactor(20);
 		this.setMaxDistance(100);

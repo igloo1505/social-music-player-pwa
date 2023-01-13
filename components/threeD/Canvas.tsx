@@ -1,10 +1,12 @@
 import React, { Fragment, Suspense, useEffect } from "react";
 import { Canvas as _Canvas } from "@react-three/fiber";
 import { useDispatch } from "react-redux";
-import dynamic from "next/dynamic";
-const AlienInvasion = dynamic(() => import("./AlienInvasion"), {
-	ssr: false,
-});
+// import dynamic from "next/dynamic";
+// const AlienInvasion = dynamic(() => import("./AlienInvasionRefIssue"), {
+// 	ssr: false,
+// });
+// import AlienInvasion from "./AlienInvasionRefIssue";
+import AlienInvasion from "./AlienInvasion";
 
 interface CanvasProps {}
 
@@ -23,8 +25,6 @@ const Canvas = ({}: CanvasProps) => {
 		}
 		container.style.height = newHeight;
 		container.style.width = newWidth;
-		// console.log("container.style.height: ", container.style.height);
-		// console.log("${containerRect.width}px: ", `${containerRect.width}px`);
 	};
 	const handleCanvasLoaded = () => {
 		dispatch({

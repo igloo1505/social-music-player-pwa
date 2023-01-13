@@ -16,3 +16,5 @@
 
 ## Performance 
 - [ ] Find way to use getServerSideProps and getInitialProps with audio and texture files, and use them in place of simple URL strings which then need to be requested _after_ initial render and canvas initialization.
+- [ ] Handle 'multiple instances of Three.js' issue.
+- [ ] Handle unable to serialize texture warning.

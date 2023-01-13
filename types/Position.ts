@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { RootState } from "@react-three/fiber";
 import ShipAnimated from "../components/threeD/ShipAnimated";
 import AlienInvasionManager from "./AlienInvasionManager";
+import { Group } from "three";
 
 export interface periodsInterface {
 	entrance: number;
@@ -36,6 +37,7 @@ type PositionType = {
 	position: vectorObject;
 	rotation?: vectorObject;
 	periods: periodsInterface;
+	shipRef: MutableRefObject<Group>;
 	animation: {
 		main: (elapsed: number, ref: MutableRefObject<any>) => void;
 		entrance: (elapsed: number, ref: MutableRefObject<any>) => void;
@@ -61,10 +63,11 @@ class Position implements PositionType {
 	audioProps?: audioProps;
 	rotationDuration?: number;
 	totalPeriod: number;
-	ref?: MutableRefObject<any>;
+	shipRef: MutableRefObject<any>;
 	phase: phaseEnum = phaseEnum.main;
 	manager: AlienInvasionManager;
 	activated: boolean = false;
+
 	// timeoutIndex: number = 0;
 	// sequentialTimeouts: () => void;
 
@@ -79,6 +82,7 @@ class Position implements PositionType {
 		rotationDuration,
 		periods,
 		manager,
+		shipRef,
 	}: PositionType) {
 		this.manager = manager;
 		this.name = name;
@@ -86,11 +90,13 @@ class Position implements PositionType {
 		this.nextInSequence = nextInSequence;
 		this.position = position;
 		this.rotation = rotation;
+		this.shipRef = shipRef;
 		this.animation = new ShipAnimated({
 			entrance: animation.entrance,
 			main: animation.main,
 			preExit: animation.preExit,
 			name: this.name,
+			shipRef: shipRef,
 		});
 		this.entranceEase = entranceEase;
 		this.audioProps = audioProps;
@@ -98,12 +104,8 @@ class Position implements PositionType {
 		this.periods = periods;
 		this.totalPeriod = periods.entrance + periods.main + periods.preExit;
 		this.phase = phaseEnum.entrance;
+		this.manager.pushInitialized();
 	}
-	setRef(ref: MutableRefObject<any>) {
-		this.ref = ref;
-		this.animation.setRef(ref);
-	}
-
 	getNextInSequence(_positionArray?: Position[]) {
 		return this.manager.positions.filter(
 			(d) => d.name === this.nextInSequence

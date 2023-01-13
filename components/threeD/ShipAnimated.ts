@@ -4,47 +4,49 @@ import { periodsInterface, vectorObject } from "../../types/Position";
 import gsap from "gsap";
 import { MutableRefObject } from "react";
 import { positionEnum } from "../../state/positionArray";
+import { Group } from "three";
 
 interface ShipAnimatedProps {
-	main: (elapased: number, ref: MutableRefObject<any>) => void;
-	entrance: (elapased: number, ref: MutableRefObject<any>) => void;
-	preExit: (elapased: number, ref: MutableRefObject<any>) => void;
+	main: (elapsed: number, ref: MutableRefObject<Group>) => void;
+	entrance: (elapsed: number, ref: MutableRefObject<Group>) => void;
+	preExit: (elapsed: number, ref: MutableRefObject<Group>) => void;
 	name: positionEnum;
+	shipRef: MutableRefObject<Group>;
 }
 
 class ShipAnimated {
-	ref?: MutableRefObject<any>;
-	main: (elapased: number, ref: MutableRefObject<any>) => void;
-	entrance: (elapased: number, ref: MutableRefObject<any>) => void;
-	preExit: (elapased: number, ref: MutableRefObject<any>) => void;
+	main: (elapsed: number, ref: MutableRefObject<Group>) => void;
+	entrance: (elapsed: number, ref: MutableRefObject<Group>) => void;
+	preExit: (elapsed: number, ref: MutableRefObject<Group>) => void;
 	phase: phaseEnum;
 	name: positionEnum;
-	constructor({ main, entrance, preExit, name }: ShipAnimatedProps) {
+	shipRef: MutableRefObject<Group>;
+	constructor({ main, entrance, preExit, name, shipRef }: ShipAnimatedProps) {
 		this.main = main;
 		this.preExit = preExit;
 		this.entrance = entrance;
 		this.phase = phaseEnum.entrance;
 		this.name = name;
-	}
-	setRef(ref: MutableRefObject<any>) {
-		this.ref = ref;
+		this.shipRef = shipRef;
 	}
 	useFrame(state: RootState, currentPosition: positionEnum) {
 		const elapsed = state.clock.getElapsedTime();
+		// debugger;
 		if (currentPosition !== this.name) {
 			debugger;
 		}
-		if (!this.ref) return;
+		console.log("this.shipRef: ", this.shipRef.current);
+		if (!this.shipRef.current) return;
 		// console.log("this.phase: ", this.phase);
 		// console.log("elapsed: ", elapsed);
 		if (this.phase === phaseEnum.entrance && this?.entrance) {
-			this.entrance(elapsed, this.ref);
+			this.entrance(elapsed, this.shipRef);
 		}
 		if (this.phase === phaseEnum.main && this?.main) {
-			this.main(elapsed, this.ref);
+			this.main(elapsed, this.shipRef);
 		}
 		if (this.phase === phaseEnum.preExit && this?.preExit) {
-			this.preExit(elapsed, this.ref);
+			this.preExit(elapsed, this.shipRef);
 		}
 	}
 	toPosition({
@@ -58,9 +60,9 @@ class ShipAnimated {
 		periods: periodsInterface;
 		entranceEase?: string;
 	}) {
-		if (position) {
+		if (position && this.shipRef?.current?.position) {
 			/// @ts-ignore
-			gsap.to(this.ref.current?.position, {
+			gsap.to(this.shipRef.current?.position, {
 				x: position.x,
 				y: position.y,
 				z: position.z,
@@ -70,9 +72,9 @@ class ShipAnimated {
 				ease: entranceEase || "power3.out",
 			});
 		}
-		if (rotation) {
+		if (rotation && this.shipRef?.current?.rotation) {
 			/// @ts-ignore
-			gsap.to(this.ref.current?.rotation, {
+			gsap.to(this.shipRef.current?.rotation, {
 				x: rotation.x,
 				y: rotation.y,
 				z: rotation.z,
