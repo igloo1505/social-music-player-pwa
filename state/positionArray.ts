@@ -1,5 +1,6 @@
 import { MutableRefObject } from "react";
 import { audioEnum } from "../types/AudioHandler";
+
 export enum positionEnum {
 	curiouslyHover = "curiouslyHover",
 	upClose = "upClose",

@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { useEffect, useRef } from "react";
 import Spline from "@splinetool/react-spline";
 export const aspectRatio = 0.656;
 import { connect, useDispatch } from "react-redux";
 import { RootState } from "../../state/store";
 import clsx from "clsx";
 import gsap from "gsap";
+
 const connector = connect((state: RootState, props) => ({
 	audioMuted: state.three.audioMuted,
 	audioInitialized: state.three.audioInitialized,
@@ -27,10 +28,6 @@ const AudioSwitch = connector(
 		const audioSwitch = useRef();
 		useEffect(() => {
 			if (typeof window === "undefined") return;
-			// let audioLabel = document.getElementById("audio-label");
-			// let muteLabel = document.getElementById("mute-label");
-			// if (!audioLabel || !muteLabel) {
-			// }
 			let tl = gsap.timeline();
 			tl.to(audioMuted ? "#mute-label" : "#audio-label", {
 				x: audioMuted ? 30 : -30,

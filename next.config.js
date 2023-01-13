@@ -11,9 +11,8 @@ const withPWA = require("next-pwa")({
 const nextConfig = {
 	experimental: {},
 	images: {},
-	reactStrictMode: true, // Recommended for the `pages` directory, default in `app`.
+	reactStrictMode: true,
 	webpack(config, { isServer }) {
-		// audio support
 		config.module.rules.push({
 			test: /\.(ogg|mp3|wav|mpe?g)$/i,
 			exclude: config.exclude,
