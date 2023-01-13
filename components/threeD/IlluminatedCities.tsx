@@ -5,17 +5,17 @@ import React, {
 	MutableRefObject,
 	forwardRef,
 } from "react";
-import { Sphere, useTexture } from "@react-three/drei";
-
+import { TextureLoader } from "three";
+import { Sphere } from "@react-three/drei";
+import Earth_Illumination_6K from "../../public/threeJs/Earth_compressed/Earth_Illumination_6K.jpg";
+import { useLoader } from "@react-three/fiber";
 interface IlluminatedCitiesProps {
 	ref: MutableRefObject<any>;
 }
 
 const IlluminatedCities = forwardRef(
 	(props: IlluminatedCitiesProps, ref: MutableRefObject<any> | any) => {
-		const citiesMap = useTexture(
-			"/threeJs/Earth_compressed/Earth_Illumination_6K.jpg"
-		);
+		const citiesMap = useLoader(TextureLoader, Earth_Illumination_6K.src);
 		return (
 			<Sphere receiveShadow args={[101, 32, 32]} ref={ref}>
 				<meshPhysicalMaterial

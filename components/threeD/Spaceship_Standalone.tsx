@@ -2,6 +2,11 @@ import React, { ForwardedRef, forwardRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { Group, Mesh, MeshStandardMaterial } from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import UFOTransformed from "../../public/threeJs/UFO-transformed.glb";
+
+import { useLoader } from "@react-three/fiber";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
 const modelPath = "/threeJs/UFO-transformed.glb";
 
@@ -95,7 +100,12 @@ type GLTFResult = GLTF & {
 const Spaceship_standalone = forwardRef(
 	(props: JSX.IntrinsicElements["group"], ref: ForwardedRef<Group>) => {
 		// const group = useRef<Group>(null!);
-		const { nodes, materials } = useGLTF(modelPath) as unknown as GLTFResult;
+		console.log("UFOTransformed.src: ", UFOTransformed);
+		// const { nodes, materials } = useGLTF(modelPath) as unknown as GLTFResult;
+		const { nodes, materials } = useGLTF(
+			UFOTransformed
+		) as unknown as GLTFResult;
+		// const { nodes, materials } = useLoader(GLTFLoader, UFOTransformed.src);
 		return (
 			<group ref={ref} {...props} dispose={null}>
 				<group name="Scene">

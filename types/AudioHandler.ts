@@ -75,9 +75,7 @@ class AudioHandler {
 		this.manager = manager;
 		const audioListener = new AudioListener();
 		this.three.camera.add(audioListener);
-		let spaceShip = this.three.scene.getObjectByName(
-			"curious-spaceShip"
-		) as Object3D;
+		const spaceShip = this.getSpaceship();
 		console.log("spaceShip: ", spaceShip);
 		audioSources.forEach((s, i) => {
 			const positionalAudio = new PositionalAudioSource(
@@ -88,13 +86,33 @@ class AudioHandler {
 				this.shipRef,
 				audioRefs[i]
 			);
-			spaceShip.add(positionalAudio);
+			spaceShip && spaceShip.add(positionalAudio);
 			this.elements.push(positionalAudio);
 		});
 		store.dispatch({
 			type: "SET-AUDIO-INITIALIZED",
 		});
-		this.manager.pushInitialized();
+		spaceShip ? this.manager.pushInitialized() : this.adhocAddAudio();
+	}
+	getSpaceship(): Object3D | undefined {
+		let spaceShip = this.three.scene.getObjectByName("curious-spaceShip");
+		return spaceShip;
+	}
+	private adhocAddAudio() {
+		const spaceship = this.getSpaceship();
+		console.log("adding audio elements adhoc");
+		if (!spaceship) {
+			return setTimeout(() => {
+				this.adhocAddAudio();
+			}, 250);
+		}
+		if (spaceship) {
+			console.log("adding audio elements adhoc... has element");
+			this.elements.forEach((a) => {
+				spaceship.add(a);
+			});
+			this.manager.pushInitialized();
+		}
 	}
 	private overlapShouldPlay(
 		ems: PositionalAudioSource[],

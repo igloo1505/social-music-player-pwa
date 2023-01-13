@@ -2,16 +2,14 @@ import React, { useRef, useEffect } from "react";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { Sphere, Float } from "@react-three/drei";
 import { TextureLoader, DoubleSide, Group, Mesh } from "three";
-// import GetThreeJsInfo from "./GetThreeJsInfo";
 import IlluminatedCities from "./IlluminatedCities";
-import AlienInvasionManager from "../../types/AlienInvasionManager";
+import EarthTexture_import from "../../public/threeJs/Earth_compressed/Earth-texture.jpg";
+import EarthNormal_import from "../../public/threeJs/Earth_compressed/Earth_NormalNRM_6k.jpg";
 
-// compressed
-const EarthTexture = "/threeJs/Earth_compressed/Earth-texture.jpg";
-const EarthNormal = "/threeJs/Earth_compressed/Earth_NormalNRM_6k.jpg";
-const EarthGloss = "/threeJs/Earth_compressed/Earth_Glossiness_6k.jpg";
-const EarthSpecular = "/threeJs/Earth_compressed/Earth_specular.jpg";
-const Earth_Clouds = "/threeJs/Earth_compressed/Earth_Clouds_6K.jpg";
+import EarthGloss_import from "../../public/threeJs/Earth_compressed/Earth_Glossiness_6k.jpg";
+import EarthSpecular_import from "../../public/threeJs/Earth_compressed/Earth_specular.jpg";
+import Earth_Clouds_import from "../../public/threeJs/Earth_compressed/Earth_Clouds_6K.jpg";
+
 const rotationPeriod = 240;
 const cycle = (Math.PI * 2) / rotationPeriod;
 
@@ -19,9 +17,16 @@ const Earth = (props: any) => {
 	const earthRef = useRef<Group>(null!);
 	const cloudsRef = useRef<Mesh>(null!);
 	const citiesRef = useRef();
+	console.log("EarthTexture_import.src: ", EarthTexture_import.src);
 	const [colorMap, normalMap, specularMap, cloudsMap, glossMap] = useLoader(
 		TextureLoader,
-		[EarthTexture, EarthNormal, EarthSpecular, Earth_Clouds, EarthGloss]
+		[
+			EarthTexture_import.src,
+			EarthNormal_import.src,
+			EarthSpecular_import.src,
+			Earth_Clouds_import.src,
+			EarthGloss_import.src,
+		]
 	);
 
 	useFrame(({ clock }) => {
@@ -64,10 +69,10 @@ const Earth = (props: any) => {
 
 export default Earth;
 
-useLoader.preload(TextureLoader, [
-	EarthTexture,
-	EarthNormal,
-	EarthSpecular,
-	Earth_Clouds,
-	EarthGloss,
-]);
+// useLoader.preload(TextureLoader, [
+// 	EarthTexture,
+// 	EarthNormal,
+// 	EarthSpecular,
+// 	Earth_Clouds,
+// 	EarthGloss,
+// ]);
