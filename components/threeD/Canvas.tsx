@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, Suspense, useEffect } from "react";
 import { Canvas as _Canvas } from "@react-three/fiber";
 import { useDispatch } from "react-redux";
 import dynamic from "next/dynamic";
@@ -46,7 +46,9 @@ const Canvas = ({}: CanvasProps) => {
 				className="alienInvasion-canvas"
 				id="alien-invasion-canvas"
 			>
-				<AlienInvasion />
+				<Suspense fallback={null}>
+					<AlienInvasion />
+				</Suspense>
 			</_Canvas>
 		</Fragment>
 	);

@@ -58,7 +58,7 @@ const positions = [
 	},
 	{
 		name: positionEnum.goProbePeople,
-		position: { x: -102, y: 0, z: 0 },
+		position: { x: -110, y: 20, z: 0 },
 		rotation: { x: Math.PI * -0.35, y: Math.PI * 0.3, z: Math.PI * -0.35 },
 		animation: {
 			main: (elapsed: number, ref: MutableRefObject<any>) => {},
@@ -152,40 +152,3 @@ const positions = [
 ];
 
 export default positions;
-
-// new Position({
-// 	name: positionEnum.pauseBeforeTakeoff,
-// 	// rotation: { x: 0, y: 0, z: 0 },
-// 	animation: {
-// 		main: (elapsed: number, ref: MutableRefObject<any>) => {
-// 			const scaleFactor = 0.005;
-// 			ref.current.rotation.y = Math.cos(Math.PI * elapsed) * scaleFactor;
-// 			ref.current.rotation.z = Math.cos(Math.PI * elapsed) * scaleFactor;
-// 			ref.current.rotation.x = Math.cos(Math.PI * elapsed) * scaleFactor;
-// 		},
-// 		preExit: (elapsed: number, ref: MutableRefObject<any>) => {
-// 			const scaleFactor = 0.005;
-// 			ref.current.rotation.y = Math.cos(Math.PI * elapsed) * scaleFactor;
-// 			ref.current.rotation.z = Math.cos(Math.PI * elapsed) * scaleFactor;
-// 			ref.current.rotation.x = Math.cos(Math.PI * elapsed) * scaleFactor;
-// 		},
-// 		entrance: (elapsed: number, ref: MutableRefObject<any>) => {
-// 			const scaleFactor = 0.005;
-// 			ref.current.rotation.y = Math.cos(Math.PI * elapsed) * scaleFactor;
-// 			ref.current.rotation.z = Math.cos(Math.PI * elapsed) * scaleFactor;
-// 			ref.current.rotation.x = Math.cos(Math.PI * elapsed) * scaleFactor;
-// 		},
-// 	},
-// 	// audioPath: audioEnum.powerUp,
-// 	audioProps: {
-// 		mainAudioPath: audioEnum.ufoSoundEffect,
-// 	},
-// 	entranceEase: "power3.out",
-// 	periods: {
-// 		entrance: 1000,
-// 		main: 2000,
-// 		preExit: 0,
-// 		positionDelay: 0,
-// 	},
-// 	nextInSequence: positionEnum.goProbePeople,
-// }),

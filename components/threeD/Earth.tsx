@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { Sphere, Float } from "@react-three/drei";
-import { TextureLoader, DoubleSide } from "three";
+import { TextureLoader, DoubleSide, Group, Mesh } from "three";
 // import GetThreeJsInfo from "./GetThreeJsInfo";
 import IlluminatedCities from "./IlluminatedCities";
 import AlienInvasionManager from "../../types/AlienInvasionManager";
@@ -12,11 +12,12 @@ const EarthNormal = "/threeJs/Earth_compressed/Earth_NormalNRM_6k.jpg";
 const EarthGloss = "/threeJs/Earth_compressed/Earth_Glossiness_6k.jpg";
 const EarthSpecular = "/threeJs/Earth_compressed/Earth_specular.jpg";
 const Earth_Clouds = "/threeJs/Earth_compressed/Earth_Clouds_6K.jpg";
-const rotationPeriod = 180;
+const rotationPeriod = 240;
+const cycle = (Math.PI * 2) / rotationPeriod;
 
 const Earth = (props: any) => {
-	const earthRef = useRef();
-	const cloudsRef = useRef();
+	const earthRef = useRef<Group>(null!);
+	const cloudsRef = useRef<Mesh>(null!);
 	const citiesRef = useRef();
 	const [colorMap, normalMap, specularMap, cloudsMap, glossMap] = useLoader(
 		TextureLoader,
@@ -24,12 +25,9 @@ const Earth = (props: any) => {
 	);
 
 	useFrame(({ clock }) => {
-		const cycle = (Math.PI * 2) / rotationPeriod;
 		const elapsedTime = clock.getElapsedTime();
 		const rotate = cycle * elapsedTime;
-		/// @ts-ignore
 		earthRef.current.rotation.y = rotate;
-		/// @ts-ignore
 		cloudsRef.current.rotation.y = rotate * 0.3;
 	});
 

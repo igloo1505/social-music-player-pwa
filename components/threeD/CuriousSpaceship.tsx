@@ -12,6 +12,7 @@ import { RootState } from "../../state/store";
 import { connect } from "react-redux";
 import { positionEnum } from "../../state/positionArray";
 import AlienInvasionManager from "../../types/AlienInvasionManager";
+import Spaceship from "./Spaceship_Standalone";
 
 const modelPath = "/threeJs/UFO_compressed_3.gltf";
 
@@ -58,19 +59,14 @@ const CuriousSpaceship = connector(
 		return (
 			<Fragment>
 				<AudioManager manager={manager} />
-				<group
-					position={
-						Object.values(
-							manager.getPositionFromEnum(initialShipState).position!
-						) as unknown as Vector3
-					}
+				<Spaceship
+					position={[102, 0, 0]}
 					scale={0.2}
 					rotation={[Math.PI * 0.1, -Math.PI * 0.1, Math.PI * 0]}
 					ref={shipRef as Ref<any>}
 					name="curious-spaceShip"
-				>
-					<primitive object={model.scene} />
-				</group>
+				/>
+				
 			</Fragment>
 		);
 	}
@@ -79,3 +75,19 @@ const CuriousSpaceship = connector(
 export default CuriousSpaceship;
 
 useGLTF.preload(modelPath);
+
+
+
+{/* <group
+position={
+	Object.values(
+		manager.getPositionFromEnum(initialShipState).position!
+	) as unknown as Vector3
+}
+scale={0.2}
+rotation={[Math.PI * 0.1, -Math.PI * 0.1, Math.PI * 0]}
+ref={shipRef as Ref<any>}
+name="curious-spaceShip"
+>
+<primitive object={model.scene} />
+</group> */}
