@@ -1,29 +1,30 @@
-import React, { Fragment, useRef } from "react";
+import React, { Fragment, useRef, useEffect } from "react";
 import { PerspectiveCamera, Preload, Grid } from "@react-three/drei";
 import { useDispatch } from "react-redux";
 import dynamic from "next/dynamic";
 import AlienInvasionManager from "../../types/AlienInvasionManager";
-import { useThree } from "@react-three/fiber";
-import { Group, PositionalAudio } from "three";
+import { Vector3, useThree } from "@react-three/fiber";
+import {
+	Camera,
+	Group,
+	PerspectiveCamera as _PerspectiveCamera,
+	PositionalAudio,
+} from "three";
 // TODO: Come back and handle scroll based camera movement here.
 import CuriousSpaceship from "./CuriousSpaceship";
 import { PositionalAudioSource } from "../../types/PositionalAudioSource";
-
+import { handleScrollPosition } from "../../animation/scrollEarth";
 const Earth = dynamic(() => import("./Earth"), {
 	ssr: false,
 });
 
-const initialCameraPosition: { x: number; y: number; z: number } = {
-	x: 0,
-	y: 0,
-	z: 250,
-};
-
+const initialCameraPosition = [0, 0, 250] as Vector3;
 interface AlienInvasionProps {}
 
 const AlienInvasion = ({}: AlienInvasionProps) => {
 	const three = useThree();
 	const ref = useRef<Group>(null!);
+	const camera = useRef<_PerspectiveCamera>(null!);
 	// PositionalAudioRefs
 	const positionalAudioRef0 = useRef<PositionalAudioSource>(null!);
 	const positionalAudioRef1 = useRef<PositionalAudioSource>(null!);
@@ -42,13 +43,18 @@ const AlienInvasion = ({}: AlienInvasionProps) => {
 		shipRef: ref,
 		audioRefs: audioRefs,
 	});
+
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+		window.addEventListener("scroll", (e) => handleScrollPosition(e, camera));
+	}, []);
+
 	return (
 		<Fragment>
 			<PerspectiveCamera
 				makeDefault
-				position={
-					Object.values(initialCameraPosition) as [number, number, number]
-				}
+				position={initialCameraPosition}
+				ref={camera}
 			/>
 			<directionalLight intensity={1} position={[-300, 140, 0]} />
 			<Earth />

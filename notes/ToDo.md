@@ -21,7 +21,7 @@
 - [ ] Handle unable to serialize texture warning.
 - [ ] Get audio files on server side as well, similarly to approach taken with textures and glb's.
 - [ ] Add performance regression according to docs.
-
+- [ ] Consider actually using ref's to update play and pause state
 
 ## Bugs
 

@@ -104,6 +104,20 @@ const LandingGridCard = connector(
 			window.addEventListener("scroll", handleScrollPosition);
 		}, []);
 
+		useEffect(() => {
+			if (typeof window === "undefined") return;
+			let em = document.getElementById(cardContainerId);
+			if (!em) return;
+			if (iconShouldTranslate) {
+				em.style.overflowY = "visible";
+			}
+			if (!iconShouldTranslate) {
+				setTimeout(() => {
+					em && (em.style.overflowY = "hidden");
+				}, 500);
+			}
+		}, [iconShouldTranslate]);
+
 		return (
 			<Fragment>
 				{isExpanded && (
@@ -122,7 +136,6 @@ const LandingGridCard = connector(
 					id={cardContainerId}
 					style={{
 						borderRadius: iconShouldTranslate ? "8px" : "0px",
-						overflowY: iconShouldTranslate ? "visible" : "hidden",
 					}}
 					onMouseEnter={() => setIsHovered(true)}
 					onMouseLeave={() => setIsHovered(false)}
