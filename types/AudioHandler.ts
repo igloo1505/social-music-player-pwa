@@ -16,7 +16,7 @@ export enum audioEnum {
 	// decompress = "threeJs/audio/ChamberDecompressing.mp3",
 	laserBlast = "threeJs/audio/LaserBlasts.mp3",
 	powerUp = "threeJs/audio/Power-Up.mp3",
-	// takeoff = "threeJs/audio/Spaceship_Takeoff.mp3",
+	takeoff = "threeJs/audio/Spaceship_Takeoff.mp3",
 	// cruising = "threeJs/audio/spaceship-cruising.mp3",
 	// landing = "threeJs/audio/ufo-landing.mp3",
 	ufoSoundEffect = "threeJs/audio/ufo-sound-effect.mp3",
@@ -48,6 +48,11 @@ export const audioSources: PositionalAudioSourceProps[] = [
 	{
 		name: "pulse",
 		path: audioEnum.pulse,
+		loop: false,
+	},
+	{
+		name: "takeoff",
+		path: audioEnum.takeoff,
 		loop: false,
 	},
 ];

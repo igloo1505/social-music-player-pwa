@@ -144,7 +144,6 @@ class Position implements PositionType {
 			entranceEase: this.entranceEase,
 		});
 	}
-	// animate(ref) {}
 }
 
 export default Position;

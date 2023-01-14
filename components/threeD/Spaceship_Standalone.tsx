@@ -4,11 +4,7 @@ import { GLTF } from "three-stdlib";
 import { Group, Mesh, MeshStandardMaterial } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import UFOTransformed from "../../public/threeJs/UFO-transformed.glb";
-
-import { useLoader } from "@react-three/fiber";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
-
-const modelPath = "/threeJs/UFO-transformed.glb";
+// const modelPath = "/threeJs/UFO-transformed.glb";
 
 type GLTFResult = GLTF & {
 	nodes: {
@@ -585,7 +581,5 @@ const Spaceship_standalone = forwardRef(
 		);
 	}
 );
-
-useGLTF.preload(modelPath);
 
 export default Spaceship_standalone;

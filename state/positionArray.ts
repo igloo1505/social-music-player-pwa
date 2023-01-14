@@ -49,9 +49,14 @@ const curiouslyHoverAudio: audioProps = {
 const goProbePeopleAudio: audioProps = {
 	main: [],
 	entrance: [
+		// {
+		// 	path: audioEnum.pulse,
+		// 	name: "pulse",
+		// 	loop: false,
+		// },
 		{
-			path: audioEnum.pulse,
-			name: "pulse",
+			path: audioEnum.takeoff,
+			name: "takeoff",
 			loop: false,
 		},
 	],
@@ -63,11 +68,13 @@ const goProbePeopleAudio: audioProps = {
 		},
 	],
 };
+
 const hideDarksideAudio: audioProps = {
 	main: [],
 	entrance: [],
 	preExit: [],
 };
+
 const upCloseAudio: audioProps = {
 	main: [
 		{
@@ -83,7 +90,13 @@ const upCloseAudio: audioProps = {
 			loop: false,
 		},
 	],
-	preExit: [],
+	preExit: [
+		{
+			path: audioEnum.takeoff,
+			name: "takeoff",
+			loop: false,
+		},
+	],
 };
 
 const positions = [
@@ -130,7 +143,6 @@ const positions = [
 			preExit: (elapsed: number, ref: MutableRefObject<Group>) => {},
 		},
 		entranceEase: "power3.out",
-		// audioPath: audioEnum.laserBlast,
 		periods: {
 			entrance: 2000,
 			main: 2000,

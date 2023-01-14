@@ -29,11 +29,13 @@ const AlienInvasion = ({}: AlienInvasionProps) => {
 	const positionalAudioRef1 = useRef<PositionalAudioSource>(null!);
 	const positionalAudioRef2 = useRef<PositionalAudioSource>(null!);
 	const positionalAudioRef3 = useRef<PositionalAudioSource>(null!);
+	const positionalAudioRef4 = useRef<PositionalAudioSource>(null!);
 	const audioRefs = [
 		positionalAudioRef0,
 		positionalAudioRef1,
 		positionalAudioRef2,
 		positionalAudioRef3,
+		positionalAudioRef4,
 	];
 	const manager = new AlienInvasionManager({
 		three: three,
